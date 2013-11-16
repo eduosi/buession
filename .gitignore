@@ -1,0 +1,16 @@
+buession.opensdf
+buession.sdf
+buession.sln
+buession.suo
+buession.*.suo
+buession.vcxproj
+buession.vcxproj.filters
+buession.vcxproj.user
+php5ts.lib
+buession.rc
+*.lib
+.svn/
+Release_TS/
+php/
+test/
+tests/

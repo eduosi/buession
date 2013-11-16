@@ -1,0 +1,22 @@
+// $Id$
+// vim:ft=javascript
+
+ARG_ENABLE("buession", "Enable Buession Support", "no");
+ARG_ENABLE("buession-debug", "Enable Buession Debug Support", "no");
+
+if(PHP_BUESSION != "no"){
+	EXTENSION("buession", "buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c" + 
+		"assert/assert.c calendar/calendar.c registry/registry.c" + 
+		"validate/validate.c ");
+		
+	ADD_SOURCES("ext/buession/dict/creditcard", "creditcard.c \
+		amerucan_express.c diners_club_us.c diners_club.c discover.c jcb.c laser.c maestro.c mastercard.c solo.c uniopay.c visa.c", "buession");
+
+	AC_DEFINE("HAVE_BUESSION", 1, "Buession Support");
+
+	if(PHP_BUESSION_DEBUG == "yes"){
+		AC_DEFINE("HAVE_BUESSION_DEBUG", 1, "Enable Buession Debug Support");
+	}else{
+		AC_DEFINE("HAVE_BUESSION_DEBUG", 0, "Disable Buession Debug Support");
+	}
+}

@@ -1,0 +1,53 @@
+Introduction
+------------
+Buession Framework 是使用 C 语言编写的一款 PHP 扩展。
+
+
+Features
+--------
+* ...
+
+
+Requirement
+------------
+PHP Version >= 5.3
+
+
+Installation
+------------
+Buession Framework can be downloaded at https://github.com/eduosi/buession/releases . 你也可以从 GitHub（https://github.com/eduosi/buession） checkout 最新代码。
+
+Buession Framework install:
+```
+$ cd buession
+$ php_installed_path/bin/phpize
+$ ./configure --with-php-config=php_installed_path/bin/php-config --enable-buession-debug=1/0(可选，是否开启 DEBUG，默认未开启，正式环境不建议开启)
+$ make
+$ make install
+```
+
+最后，在php.ini中加入extension=buession.so
+
+
+Configuration
+------------
+```
+buession.runtime.environment string default value is null。设置当前运行环境，可根据此值在开发、测试、正式环境时，加载不同的应用配置文件。
+```
+
+Version Description
+-------------------
+
+* Buession PHP Framework 将严格遵循国际软件命名规范
+* 版本命名格式：主版本号.次版本号.修订版本号 软件版本 （Build-可选，以修正 “sp + 日期” 定义，仅在 Release 版中产生）
+* 主版本号：如果发生重大变化，或增加新名称空间、类级别的 API 将会改变，或对 PHP 版本的依赖发生大变化
+* 次版本号：已有 API 发生重大变化，或已有名称空间、类下新增 API 将发生改变
+* 修订版本号：局部调整，性能优化，BUG 修复，将发生改变
+* 软件版本：Alpha   - 处于开发阶段，内部测试，功能不完善，BUG 多（不推荐使用）
+            Beta    - 功能完善，可供外部使用，但可能也会存在重大性能问题和重大 BUG（谨慎使用）
+			Release - 功能完善，可供外部使用，无重大性能问题和 BUG（推荐使用）
+			Final	- 最终版本，修复 Release 版的性能问题和 BUG，此版本只修复重大性能问题和 BUG，小 BUG 将不做修复（推荐使用）
+
+Documentation
+-------------
+编写中.

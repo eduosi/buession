@@ -1,0 +1,15 @@
+Installing BUESSION
+==========================================================
+
+1.PHP Version >= 5.3
+
+2.INSTALL
+
+	$ cd buession
+	$ php_installed_path/bin/phpize
+	$ ./configure --with-php-config=php_installed_path/bin/php-config --enable-buession-debug
+	$ make
+	$ make install
+
+3.Options Description
+	1) --enable-buession-debug：是否开启 DEBUG，可选值"0"（不开启，默认，正式环境推荐值）或者"1"（开启，开发或测试环境推荐值）
