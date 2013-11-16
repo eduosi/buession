@@ -95,7 +95,8 @@ ZEND_END_MODULE_GLOBALS(buession)
 ZEND_EXTERN_MODULE_GLOBALS(buession)
 
 #define BUESSION_CLEAN_STRING_G(fields){	\
-	buession_free((char *) BUESSION_G(fields));	\
+	char *v = (char *) BUESSION_G(fields);	\
+	buession_free(v);	\
 	BUESSION_G(fields##_length) = 0;	\
 }
 
