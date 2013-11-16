@@ -51,7 +51,7 @@ BUESSION_API zval *buession_zval_persistent_value(zval *value TSRMLS_DC){
 			}
 			break;
 		case IS_CONSTANT: case IS_STRING:
-			CHECK_ZVAL_STRING(zvalue);
+			CHECK_ZVAL_STRING(value);
 			Z_STRVAL_P(ret) = pestrndup(Z_STRVAL_P(value), Z_STRLEN_P(value), TRUE);
 			Z_STRLEN_P(ret) = Z_STRLEN_P(value);
 			break;

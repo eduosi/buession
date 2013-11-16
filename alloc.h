@@ -57,16 +57,17 @@
 	array_init_size(array, size);
 
 #define buession_free(v){	\
-	char *a = (v);	\
-	if(a){	\
-		efree(a);	\
-		a = NULL;	\
+	char *s = (v);	\
+	if(s){	\
+		efree(s);	\
+		s = NULL;	\
 	}	\
 }
 #define buession_pfree(v, is_persistent){	\
-	if(v){	\
-		pefree(v, is_persistent);	\
-		v = NULL;	\
+	char *s = (v);	\
+	if(s){	\
+		pefree(s, is_persistent);	\
+		s = NULL;	\
 	}	\
 }
 #define buession_zval_dtor(z){	\
