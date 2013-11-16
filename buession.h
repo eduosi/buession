@@ -78,9 +78,9 @@ ZEND_BEGIN_MODULE_GLOBALS(buession)
 	char *classpath;
 	size_t classpath_length;
 	buession_registry registry;
-	char *clientip;
+	const char *clientip;
 	uint clientip_length;
-	char *scheme;
+	const char *scheme;
 	uint scheme_length;
 	zend_bool isHttp;
 	char *root;

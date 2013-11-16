@@ -57,9 +57,10 @@
 	array_init_size(array, size);
 
 #define buession_free(v){	\
-	if(v){	\
-		efree(v);	\
-		v = NULL;	\
+	char *a = (v);	\
+	if(a){	\
+		efree(a);	\
+		a = NULL;	\
 	}	\
 }
 #define buession_pfree(v, is_persistent){	\
