@@ -377,7 +377,7 @@ static inline zend_bool assert_object_member_exists(zval *object, char *member, 
 		zend_object_iterator *iterator = ce->get_iterator(ce, object, 0 TSRMLS_CC);
 		char *str_key;
 		uint str_key_length;
-		uint index;
+		ulong index;
 
 		*instanceOfTraversable = TRUE;
 		if(EG(exception)){
