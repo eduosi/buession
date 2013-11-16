@@ -31,6 +31,14 @@ PHP_ARG_ENABLE(buession-debug, enable buession debug support, default no,
 	[PHP_BUESSION_DEBUG=$enableval],
 	[PHP_BUESSION_DEBUG="no"])
 
+AC_DEFUN([PHP_BUESSION_ADD_BUILD_DIR], [
+  PHP_BUESSION_EXTRA_BUILD_DIRS="$PHP_BUESSION_EXTRA_BUILD_DIRS $1"
+])
+
+AC_DEFUN([PHP_BUESSION_ADD_INCLUDE], [
+  PHP_BUESSION_EXTRA_INCLUDES="$PHP_BUESSION_EXTRA_INCLUDES $1"
+])
+
 if test "$PHP_BUESSION" != "no"; then
 	AC_MSG_CHECKING([PHP version])
 	
@@ -77,8 +85,10 @@ if test "$PHP_BUESSION" != "no"; then
 		assert/assert.c calendar/calendar.c registry/registry.c \
 		validate/validate.c], $ext_shared, , $PHP_BUESSION_FLAGS)
 
-    PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard, 1)
-    PHP_INSTALL_HEADERS([$ext_builddir/dict/creditcard/creditcard.h])
+	PHP_BUESSION_ADD_BUILD_DIR([dict])
+	PHP_BUESSION_ADD_BUILD_DIR([dict/creditcard])
+	PHP_BUESSION_ADD_INCLUDE([dict])
+	PHP_BUESSION_ADD_INCLUDE([dict/creditcard])
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
 	
 	if test "$PHP_BUESSION_DEBUG" = "yes"; then
