@@ -24,10 +24,10 @@ dnl [  AC_DEFINE(HAVE_BUESSION_DEBUG, 0, [Disable Buession Debug Support])  ]
 dnl )
 
 PHP_ARG_ENABLE(buession, whether to enable buession support,
-	[ --enable-buession           enable buession support])
+	[  --enable-buession           enable buession support])
 
 PHP_ARG_ENABLE(buession-debug, enable buession debug support, default no,
-	[ --enable-buession-debug          Enable Buession Debug Support])
+	[  --enable-buession-debug          Enable Buession Debug Support])
 
 AC_DEFUN([PHP_BUESSION_ADD_BUILD_DIR], [
   PHP_BUESSION_EXTRA_BUILD_DIRS="$PHP_BUESSION_EXTRA_BUILD_DIRS $1"
@@ -94,4 +94,6 @@ if test "$PHP_BUESSION" != "no"; then
 	else
 		AC_DEFINE(HAVE_BUESSION_DEBUG, 0, [Disable Buession Debug Support])
 	fi
+	
+	PHP_SUBST(BUESSION_SHARED_LIBADD)
 fi
