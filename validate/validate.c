@@ -30,7 +30,6 @@
 /* include buession file */
 #include "buession.h"
 #include "validate.h"
-#include "rules.h"
 #include "dict/domain.h"
 #include "dict/creditcard/creditcard.h"
 #include "calendar/calendar.h"
@@ -893,14 +892,14 @@ BUESSION_API zend_bool validate_isUrl(const char *str TSRMLS_DC){
 	return validate_isUrl_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isUrl_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL(VALOIDATE_URL), FALSE, 0, NULL TSRMLS_CC);
+	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_URL"), FALSE, 0, NULL TSRMLS_CC);
 }
 
 BUESSION_API zend_bool validate_isMail(const char *str TSRMLS_DC){
 	return validate_isMail_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isMail_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL(VALOIDATE_MAIL), FALSE, 0, NULL TSRMLS_CC);
+	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_MAIL"), FALSE, 0, NULL TSRMLS_CC);
 }
 
 BUESSION_API zend_bool validate_isQQ(const char *str TSRMLS_DC){
@@ -920,7 +919,7 @@ BUESSION_API zend_bool validate_isMsn(const char *str TSRMLS_DC){
 	return validate_isMsn_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isMsn_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL(VALOIDATE_MSN), FALSE, 0, NULL TSRMLS_CC);
+	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_MSN"), FALSE, 0, NULL TSRMLS_CC);
 }
 
 BUESSION_API zend_bool validate_isAlipay(const char *str TSRMLS_DC){

@@ -83,9 +83,9 @@ ZEND_BEGIN_MODULE_GLOBALS(buession)
 	const char *scheme;
 	uint scheme_length;
 	zend_bool isHttp;
-	char *root;
+	const char *root;
 	size_t root_length;
-	char *webroot;
+	const char *webroot;
 	size_t webroot_length;
 	char *charset;
 	size_t charset_length;
