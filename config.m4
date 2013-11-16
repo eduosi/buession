@@ -77,8 +77,7 @@ if test "$PHP_BUESSION" != "no"; then
 		assert/assert.c calendar/calendar.c registry/registry.c \
 		validate/validate.c], $ext_shared, , $PHP_BUESSION_FLAGS)
 
-    PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard)
-    PHP_INSTALL_HEADERS([ext/buession], [dict/creditcard/])
+    PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard, 1)
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
 	
 	if test "$PHP_BUESSION_DEBUG" = "yes"; then
