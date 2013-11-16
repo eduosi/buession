@@ -1529,9 +1529,7 @@ static BUESSION_METHOD(validate, isCreditCard){
 	int type = 0;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &str, &str_length, &type) == SUCCESS){
-		Z_TYPE_P(return_value) = IS_BOOL;
-		Z_BVAL_P(return_value) = validate_isCreditCard_ex(str, str_length, type TSRMLS_CC);
-		return;
+		RETURN_BOOL(validate_isCreditCard_ex(str, str_length, type TSRMLS_CC));
 	}
 
 	RETURN_FALSE;
@@ -1547,9 +1545,7 @@ static BUESSION_METHOD(validate, isIsbn){
 	uint separator_length = 1;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ls", &str, &str_length, &type, &separator, &separator_length) == SUCCESS){
-		Z_TYPE_P(return_value) = IS_BOOL;
-		Z_BVAL_P(return_value) = validate_isIsbn_ex(str, str_length, type, separator, separator_length TSRMLS_CC);
-		return;
+		RETURN_BOOL(validate_isIsbn_ex(str, str_length, type, separator, separator_length TSRMLS_CC));
 	}
 
 	RETURN_FALSE;
@@ -1564,9 +1560,7 @@ static BUESSION_METHOD(validate, Regex){
 	uint pattern_length;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, 2 TSRMLS_CC, "ss", &str, &str_length, &pattern, &pattern_length) == SUCCESS){
-		Z_TYPE_P(return_value) = IS_BOOL;
-		Z_BVAL_P(return_value) = buession_regex_match_ex(str, str_length, pattern, pattern_length, FALSE, 0, NULL TSRMLS_CC);
-		return;
+		RETURN_BOOL(buession_regex_match_ex(str, str_length, pattern, pattern_length, FALSE, 0, NULL TSRMLS_CC));
 	}
 
 	RETURN_FALSE;
