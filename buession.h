@@ -73,19 +73,19 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 
 ZEND_BEGIN_MODULE_GLOBALS(buession)
 	time_t timestamp;
-	const char *environment;
+	char *environment;
 	size_t environment_length;
 	char *classpath;
 	size_t classpath_length;
 	buession_registry registry;
-	const char *clientip;
+	char *clientip;
 	uint clientip_length;
-	const char *scheme;
+	char *scheme;
 	uint scheme_length;
 	zend_bool isHttp;
-	const char *root;
+	char *root;
 	size_t root_length;
-	const char *webroot;
+	char *webroot;
 	size_t webroot_length;
 	char *charset;
 	size_t charset_length;
