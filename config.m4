@@ -87,6 +87,10 @@ if test "$PHP_BUESSION" != "no"; then
 	PHP_BUESSION_ADD_BUILD_DIR([dict/creditcard])
 	PHP_BUESSION_ADD_INCLUDE([dict])
 	PHP_BUESSION_ADD_INCLUDE([dict/creditcard])
+	
+	PHP_ADD_BUILD_DIR($ext_builddir/dict)
+	PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard)
+	s
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
 	
 	if test "$PHP_BUESSION_DEBUG" = "yes"; then
