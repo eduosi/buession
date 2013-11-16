@@ -78,6 +78,7 @@ if test "$PHP_BUESSION" != "no"; then
 		validate/validate.c], $ext_shared, , $PHP_BUESSION_FLAGS)
 
     PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard, 1)
+    PHP_INSTALL_HEADERS([$ext_builddir/dict/creditcard/creditcard.h])
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
 	
 	if test "$PHP_BUESSION_DEBUG" = "yes"; then
