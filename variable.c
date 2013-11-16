@@ -264,19 +264,19 @@ BUESSION_API char *buession_object_valueof(zval *data, size_t *result_length TSR
 	switch(Z_TYPE_P(data)){
 		case IS_STRING:
 			*result_length = Z_STRLEN_P(data);
-			return estrndup_rel(Z_STRVAL_P(data), Z_STRLEN_P(data));
+			return estrndup(Z_STRVAL_P(data), Z_STRLEN_P(data));
 			break;
 		case IS_NULL:
 			*result_length = 4;
-			return estrndup_rel("NULL", 4);
+			return estrndup("NULL", 4);
 			break;
 		case IS_BOOL:
 			if(Z_BVAL_P(data) == TRUE){
 				*result_length = 4;
-				return estrndup_rel("true", 4);
+				return estrndup("true", 4);
 			}else{
 				*result_length = 5;
-				return estrndup_rel("false", 5);
+				return estrndup("false", 5);
 			}
 			break;
 		case IS_OBJECT:
@@ -288,13 +288,13 @@ BUESSION_API char *buession_object_valueof(zval *data, size_t *result_length TSR
 			}
 
 			*result_length = Z_OBJCE_P(data)->name_length;
-			return estrndup_rel(Z_OBJCE_P(data)->name, Z_OBJCE_P(data)->name_length);
+			return estrndup(Z_OBJCE_P(data)->name, Z_OBJCE_P(data)->name_length);
 			break;
 		case IS_ARRAY:
 			*result_length = 5;
 			buession_unsupported_convert_exception("Array", "string");
 
-			return estrndup_rel("Array", 5);
+			return estrndup("Array", 5);
 			break;
 		default: {
 				zval str = *data;
@@ -310,7 +310,7 @@ BUESSION_API char *buession_object_valueof(zval *data, size_t *result_length TSR
 	}
 
 	*result_length = 0;
-	return estrndup_rel("", 0);
+	return estrndup("", 0);
 }
 
 BUESSION_API zval *buession_string_convert_original(char *value TSRMLS_DC){
