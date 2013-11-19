@@ -71,7 +71,7 @@ if test "$PHP_BUESSION" != "no"; then
 
 	PHP_BUESSION_FLAGS="-DHAVE_CONFIG_H -I@ext_srcdir@/dict"
 	PHP_NEW_EXTENSION(buession, [buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c \
-		$creditcard_source \
+		dict/creditcard/creditcard.c \
 		assert/assert.c calendar/calendar.c registry/registry.c \
 		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
 
