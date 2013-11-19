@@ -26,7 +26,7 @@ dnl )
 PHP_ARG_ENABLE(buession, whether to enable buession support,
 	[  --enable-buession           enable buession support])
 
-PHP_ARG_ENABLE(buession-debug, enable buession debug support, default no,
+PHP_ARG_ENABLE(buession-debug, enable buession debug support(default no),
 	[  --enable-buession-debug          Enable Buession Debug Support])
 
 if test "$PHP_BUESSION" != "no"; then
@@ -54,7 +54,7 @@ if test "$PHP_BUESSION" != "no"; then
   	buession_php_version=`expr [$]1 \* 1000000 + [$]2 \* 1000 + [$]3`
   	AC_MSG_ERROR([$buession_php_version])
 
-  	if test "$buession_php_version" -le "5004000"; then
+  	if test "$buession_php_version" -le "5003000"; then
     	AC_MSG_ERROR([You need at least PHP 5.3.0 to be able to use this version of Buession. PHP $php_version found])
   	else
     	AC_MSG_RESULT([$php_version, ok])
