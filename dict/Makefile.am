@@ -4,7 +4,7 @@ LANG=C
 EXTRA_DIST=AUTHORS DISCLAIMER LICENSE buildconf
 SUBDIRS = creditcard doc
 RUNTESTDEFAULTFLAGS=--tool $$tool --srcdir "$$srcdir"/tests
-MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in
+MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in *~
 
 dist-hook:
 	cp $(srcdir)/doc/buession.1 $(distdir)/doc
@@ -20,4 +20,3 @@ dist-hook:
 	cp $(srcdir)/creditcard/solo.h $(distdir)/creditcard
 	cp $(srcdir)/creditcard/uniopay.h $(distdir)/creditcard
 	cp $(srcdir)/creditcard/visa.h $(distdir)/creditcard
-	cp $(srcdir)/FAQ $(distdir)
