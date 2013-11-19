@@ -1,22 +1,22 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src doc
+SUBDIRS = creditcard doc
 
 MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in \
 			stamp-h.in *~
 
 dist-hook:
 	cp $(srcdir)/doc/buession.1 $(distdir)/doc
-	cp $(srcdir)/src/creditcard.h $(distdir)/src
-	cp $(srcdir)/src/amerucan_express.h $(distdir)/src
-	cp $(srcdir)/src/diners_club_us.h $(distdir)/src
-	cp $(srcdir)/src/diners_club.h $(distdir)/src
-	cp $(srcdir)/src/discover.h $(distdir)/src
-	cp $(srcdir)/src/jcb.h $(distdir)/src
-	cp $(srcdir)/src/laser.h $(distdir)/src
-	cp $(srcdir)/src/maestro.h $(distdir)/src
-	cp $(srcdir)/src/mastercard.h $(distdir)/src
-	cp $(srcdir)/src/solo.h $(distdir)/src
-	cp $(srcdir)/src/uniopay.h $(distdir)/src
-	cp $(srcdir)/src/visa.h $(distdir)/src
+	cp $(srcdir)/creditcard/creditcard.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/amerucan_express.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/diners_club_us.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/diners_club.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/discover.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/jcb.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/laser.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/maestro.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/mastercard.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/solo.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/uniopay.h $(distdir)/creditcard
+	cp $(srcdir)/creditcard/visa.h $(distdir)/creditcard
 	cp $(srcdir)/FAQ $(distdir)
