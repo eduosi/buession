@@ -3,6 +3,7 @@
 LANG=C
 EXTRA_DIST=AUTHORS DISCLAIMER LICENSE buildconf
 SUBDIRS = creditcard doc
+RUNTESTDEFAULTFLAGS=--tool $$tool --srcdir "$$srcdir"/tests
 MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in
 
 dist-hook:
