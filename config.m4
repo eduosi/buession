@@ -31,22 +31,22 @@ PHP_ARG_ENABLE(buession-debug, enable buession debug support, default no,
 
 if test "$PHP_BUESSION" != "no"; then
 	AC_MSG_CHECKING([PHP version])
-	
+
 	tmp_version=$PHP_VERSION
 	if test -z "$tmp_version"; then
 		if test -z "$PHP_CONFIG"; then
 			AC_MSG_ERROR([php-config not found])
 		fi
-		
+
 		php_version=`$PHP_CONFIG --version 2>/dev/null|head -n 1|sed -e 's#\(\d\.\d*\.\d*\)\(.*\)#\1#'`
 	else
 		php_version=`echo "$tmp_version"|sed -e 's#\(\d\.\d*\.\d*\)\(.*\)#\1#'`
 	fi
-	
+
 	if test -z "$php_version"; then
 		AC_MSG_ERROR([Failed to detect PHP version, please report])
 	fi
-	
+
 	ac_IFS=$IFS
   	IFS="."
   	set $php_version
@@ -58,7 +58,7 @@ if test "$PHP_BUESSION" != "no"; then
   	else
     	AC_MSG_RESULT([$php_version, ok])
   	fi
-	
+
 	creditcard_source = "dict/creditcard/creditcard.c \
 			dict/creditcard/amerucan_express.c \
 			dict/creditcard/diners_club_us.c dict/creditcard/diners_club.c dict/creditcard/discover.c \
@@ -79,12 +79,12 @@ if test "$PHP_BUESSION" != "no"; then
 	PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard)
 
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
-	
+
 	if test "$PHP_BUESSION_DEBUG" = "yes"; then
 		AC_DEFINE(HAVE_BUESSION_DEBUG, 1, [Enable Buession Debug Support])
 	else
 		AC_DEFINE(HAVE_BUESSION_DEBUG, 0, [Disable Buession Debug Support])
 	fi
-	
+
 	PHP_SUBST(BUESSION_SHARED_LIBADD)
 fi
