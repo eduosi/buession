@@ -1,6 +1,6 @@
-# Makefile for bcmath library
+# Makefile for creditcard library
 
-lib_LIBRARIES = libbcmath.a
+lib_LIBRARIES = creditcard.a
 
 include_HEADERS = creditcard.h \
 	amerucan_express.h \
@@ -12,7 +12,7 @@ include_HEADERS = creditcard.h \
 	uniopay.h \
 	visa.h
 
-libbcmath_a_SOURCES = creditcard.c \
+creditcard_a_SOURCES = creditcard.c \
 	amerucan_express.c \
 	diners_club_us.c diners_club.c discover.c \
 	jcb.c \

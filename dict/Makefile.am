@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
+LANG=C
+EXTRA_DIST=AUTHORS DISCLAIMER LICENSE buildconf
 SUBDIRS = creditcard doc
-
-MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in \
-			stamp-h.in *~
+MAINTAINERCLEANFILES = aclocal.m4 config.h.in configure Makefile.in
 
 dist-hook:
 	cp $(srcdir)/doc/buession.1 $(distdir)/doc
