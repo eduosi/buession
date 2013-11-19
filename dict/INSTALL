@@ -1,0 +1,10 @@
+For UNIX compatible system,
+
+./buildconf
+./configure 
+make
+make install
+
+For Windows,
+
+Visual C++ 10.0 is suppoted.
