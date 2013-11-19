@@ -53,7 +53,7 @@ if test "$PHP_BUESSION" != "no"; then
   	IFS=$ac_IFS
   	buession_php_version=`expr [$]1 \* 1000000 + [$]2 \* 1000 + [$]3`
 
-  	if test "$buession_php_version" -le "5003000"; then
+  	if test "$buession_php_version" -le "5004000"; then
     	AC_MSG_ERROR([You need at least PHP 5.3.0 to be able to use this version of Buession. PHP $php_version found])
   	else
     	AC_MSG_RESULT([$php_version, ok])
@@ -71,7 +71,7 @@ if test "$PHP_BUESSION" != "no"; then
 
 	PHP_BUESSION_FLAGS="-DHAVE_CONFIG_H -I@ext_srcdir@/dict"
 	PHP_NEW_EXTENSION(buession, [buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c \
-		dict/creditcard/creditcard.c \
+		$creditcard_source \
 		assert/assert.c calendar/calendar.c registry/registry.c \
 		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
 
