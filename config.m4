@@ -69,11 +69,11 @@ if test "$PHP_BUESSION" != "no"; then
 			dict/creditcard/uniopay.c \
 			dict/creditcard/visa.c"
 
-	PHP_BUESSION_FLAGS="-DHAVE_CONFIG_H -I@ext_srcdir@/dict/creditcard"
+	PHP_BUESSION_FLAGS="-DHAVE_CONFIG_H -I@ext_srcdir@/dict"
 	PHP_NEW_EXTENSION(buession, [buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c \
 		$creditcard_source \
 		assert/assert.c calendar/calendar.c registry/registry.c \
-		validate/validate.c], $ext_shared, , $PHP_BUESSION_FLAGS)
+		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
 
 	PHP_ADD_BUILD_DIR($ext_builddir/dict)
 	PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard)
