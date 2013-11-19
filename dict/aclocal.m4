@@ -18,7 +18,7 @@ dnl PARTICULAR PURPOSE.
 
 dnl Usage:
 dnl AM_INIT_AUTOMAKE(package,version, [no-define])
-
+AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
 AC_DEFUN([AM_INIT_AUTOMAKE],
 [AC_REQUIRE([AC_PROG_INSTALL])
 PACKAGE=[$1]
