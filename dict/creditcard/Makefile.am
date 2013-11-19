@@ -27,7 +27,7 @@ INCLUDES = -I$(srcdir) -I..
 CFLAGS = @CFLAGS@
 CPPFLAGS = $(INCLUDES) -Wall
 
-MAINTAINERCLEANFILES= Makefile.in $(libbcmath_a_SOURCES) creditcard.h amerucan_express.h diners_club_us.h diners_club.c discover.h jcb.h laser.h maestro.h mastercard.h solo.h uniopay.h visa.h
+MAINTAINERCLEANFILES = Makefile.in $(creditcard_a_SOURCES) creditcard.h amerucan_express.h diners_club_us.h diners_club.c discover.h jcb.h laser.h maestro.h mastercard.h solo.h uniopay.h visa.h
 
 all: $(bin_LIBRARIES)
 

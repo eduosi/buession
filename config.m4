@@ -59,17 +59,19 @@ if test "$PHP_BUESSION" != "no"; then
     	AC_MSG_RESULT([$php_version, ok])
   	fi
 
+	creditcard_source = "dict/creditcard/creditcard.c \
+			dict/creditcard/amerucan_express.c \
+			dict/creditcard/diners_club_us.c dict/creditcard/diners_club.c dict/creditcard/discover.c \
+			dict/creditcard/jcb.c \
+			dict/creditcard/laser.c \
+			dict/creditcard/maestro.c dict/creditcard/mastercard.c \
+			dict/creditcard/solo.c \
+			dict/creditcard/uniopay.c \
+			dict/creditcard/visa.c"
+
 	PHP_BUESSION_FLAGS="-DHAVE_CONFIG_H -I@ext_srcdir@/dict"
 	PHP_NEW_EXTENSION(buession, [buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c \
-		dict/creditcard/creditcard.c \
-		dict/creditcard/amerucan_express.c \
-		dict/creditcard/diners_club_us.c dict/creditcard/diners_club.c dict/creditcard/discover.c \
-		dict/creditcard/jcb.c \
-		dict/creditcard/laser.c \
-		dict/creditcard/maestro.c dict/creditcard/mastercard.c \
-		dict/creditcard/solo.c \
-		dict/creditcard/uniopay.c \
-		dict/creditcard/visa.c \
+		$creditcard_source \
 		assert/assert.c calendar/calendar.c registry/registry.c \
 		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
 
