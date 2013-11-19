@@ -26,6 +26,12 @@ dnl )
 PHP_ARG_ENABLE(buession, whether to enable buession support,
 	[  --enable-buession           enable buession support])
 
+AC_ARG_ENABLE(buession-debug,
+	[  --enable-sbuession-debug          enable buession debug support(default no)], [
+  		AC_DEFINE(HAVE_BUESSION_DEBUG, 1, [Enable Buession Debug Support])
+	], [
+  		AC_DEFINE(HAVE_BUESSION_DEBUG, 0, [Disable Buession Debug Support])
+	])
 PHP_ARG_ENABLE(buession-debug, enable buession debug support(default no),
 	[  --enable-buession-debug          Enable Buession Debug Support])
 
@@ -80,12 +86,6 @@ if test "$PHP_BUESSION" != "no"; then
 	PHP_ADD_BUILD_DIR($ext_builddir/dict/creditcard)
 
 	AC_DEFINE(HAVE_BUESSION, 1, [Buession Support])
-
-	if test "$PHP_BUESSION_DEBUG" = "yes"; then
-		AC_DEFINE(HAVE_BUESSION_DEBUG, 1, [Enable Buession Debug Support])
-	else
-		AC_DEFINE(HAVE_BUESSION_DEBUG, 0, [Disable Buession Debug Support])
-	fi
 
 	PHP_SUBST(BUESSION_SHARED_LIBADD)
 fi
