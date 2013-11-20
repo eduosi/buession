@@ -360,7 +360,7 @@ BUESSION_API zend_bool validate_isChinese_ex(const char *str, uint str_length TS
 	int ovector[3];
 
 	re = pcre_get_compiled_regex("/^[\x7f-\xff]+$/", &extra, &options TSRMLS_CC);
-	return re == NULL||pcre_exec(re, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE;
+	return re == NULL||pcre_exec(re, NULL, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE;
 }
 
 BUESSION_API zend_bool validate_isAlpha(const char *str TSRMLS_DC){
@@ -685,7 +685,7 @@ BUESSION_API zend_bool validate_isPostCode_ex(const char *str, uint str_length T
 	return FALSE;
 }
 
-static inline zend_bool validate_isIPV4(const char *str, uint str_length, int *ip TSRMLS_DC){
+static inline zend_bool validate_isIPV4(const char *str, uint str_length TSRMLS_DC){
 	if(str_length >= 7&&str_length <= 15){
 		const char *end = str + str_length;
 		const char *p = str;
@@ -716,7 +716,6 @@ static inline zend_bool validate_isIPV4(const char *str, uint str_length, int *i
 				return FALSE;
 			}
 
-			ip[n++] = num;
 			if(n == 4){
 				return str == end;
 			}else if(p >= end||*(str++) != '.'){
