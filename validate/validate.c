@@ -24,6 +24,7 @@
 #include "Zend/zend_API.h"
 #include "main/php.h"
 #include "main/php_main.h"
+#include "ext/standard/url.h"
 #include "ext/date/php_date.h"
 #include "ext/date/lib/timelib.h"
 
@@ -352,7 +353,13 @@ BUESSION_API zend_bool validate_isChinese(const char *str TSRMLS_DC){
 	return validate_isChinese_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isChinese_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("/^[\x7f-\xff]+$/"), FALSE, 0, NULL TSRMLS_CC);
+	pcre_cache_entry *entry = NULL;
+	pcre_extra *extra = NULL;
+	int options = 0;
+	int ovector[3];
+
+	entry = pcre_get_compiled_regex("/^[\x7f-\xff]+$/", &extra, &options TSRMLS_CC);
+	return entry == NULL||pcre_exec(entry, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE;
 }
 
 BUESSION_API zend_bool validate_isAlpha(const char *str TSRMLS_DC){
@@ -677,75 +684,46 @@ BUESSION_API zend_bool validate_isPostCode_ex(const char *str, uint str_length T
 	return FALSE;
 }
 
-static inline zend_bool _validate_IPV4_group_valid(const char *str, uint str_length TSRMLS_DC){
-	if(str != NULL&&str_length >= 1&&str_length <= 3){
-		const char *p = str;
-		uint i = 0;
-
-		switch(str_length){
-			case 1: case 2:
-				valid:
-				for(; i < str_length; i++){
-					if(str[i] < '0'||str[i] > '9'){
-						return FALSE;
-					}
-				}
-
-				return TRUE;
-				break;
-			case 3:
-				if(*p == '0'||*p == '1'){
-					i = 1;
-					goto valid;
-				}else if(*p == '2'){
-					++p;
-					if(*p >= '0'&&*p <= '4'){
-						i = 2;
-						goto valid;
-					}else if(*p == '5'){
-						++p;
-						if(*p < '0'||*p > '5'){
-							return FALSE;
-						}
-
-						return TRUE;
-					}
-				}
-				break;
-			default:
-				break;
-		}
-	}
-
-	return FALSE;
-}
-static inline zend_bool validate_isIPV4(const char *str, uint str_length TSRMLS_DC){
+static inline zend_bool validate_isIPV4(const char *str, uint str_length, int *ip TSRMLS_DC){
 	if(str_length >= 7&&str_length <= 15){
-		const char *p = (const char *) memchr(str, '.', str_length);
+		const char *end = str + str_length;
+		const char *p = str;
+		int num;
+		int m;
+		int n = 0;
 
-		if(p != NULL){
-			const char *s = str;
-			const char *end = str + str_length;
-			uint i = 1;
+		while(p < end){
+			zend_bool leading_zero;
 
-			do{
-				if(i >= 5){
+			if(n > 4||*str < '0'||*str > '9'){
+				return FALSE;
+			}
+
+			leading_zero = (*p == '0');
+			m = 1;
+			num = ((*(p++)) - '0');
+			while(str < end&&(*p >= '0'&&*p <= '9')){
+				num = num * 10 + ((*(p++)) - '0');
+				if(num > 255||++m > 3){
 					return FALSE;
 				}
+			}
 
-				if(_validate_IPV4_group_valid(s, p - s TSRMLS_CC) == FALSE){
-					return FALSE;
-				}
+			/* don't allow a leading 0; that introduces octal numbers,
+			 * which we don't support */
+			if(leading_zero == TRUE&&(num != 0||m > 1)){
+				return FALSE;
+			}
 
-				p = p + 1;
-				s = p;
-				++i;
-			}while((p = (const char *) memchr(p, '.', str_length - (p - str))));
-
-			if(i == 4&&p < end&&_validate_IPV4_group_valid(s, str_length - (s - str) TSRMLS_CC) == TRUE){	/* last group */
-				return TRUE;
+			ip[n++] = num;
+			if(n == 4){
+				return str == end;
+			}else if(p >= end||*(str++) != '.'){
+				return FALSE;
 			}
 		}
+
+		return TRUE;
 	}
 
 	return FALSE;
@@ -892,14 +870,65 @@ BUESSION_API zend_bool validate_isUrl(const char *str TSRMLS_DC){
 	return validate_isUrl_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isUrl_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_URL"), FALSE, 0, NULL TSRMLS_CC);
+	php_url *url = php_url_parse_ex(str, str_length);
+
+	if(url == NULL){
+		return FALSE;
+	}else{
+		if(url->scheme != NULL&&(strcasecmp(url->scheme, "http") == 0||strcasecmp(url->scheme, "https") == 0)){
+			char *end;
+			char *p = url->host;
+
+			if(url->host == NULL) {
+				goto failure;
+			}
+
+			if(isalnum((int) *(unsigned char *) p) == FALSE){
+				goto failure;
+			}
+
+			end = url->host + strlen(url->host);
+			while(p < end){
+				if(!isalnum((int) *(unsigned char *) p)&&*p != '-'&&*p != '.'){
+					goto failure;
+				}
+
+				p++;
+			}
+
+			if (*(end - 1) == '.'){
+				goto failure;
+			}
+		}
+
+		if(url->scheme == NULL
+			/* some schemas allow the host to be empty */
+			||(url->host == NULL&&(strcmp(url->scheme, "mailto")&&strcmp(url->scheme, "news")&&strcmp(url->scheme, "file")))){
+			failure:
+			php_url_free(url);
+			return FALSE;
+		}
+
+		php_url_free(url);
+		return TRUE;
+	}
 }
 
 BUESSION_API zend_bool validate_isMail(const char *str TSRMLS_DC){
 	return validate_isMail_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isMail_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_MAIL"), FALSE, 0, NULL TSRMLS_CC);
+	if(str_length <= 320){
+		pcre_cache_entry *entry = NULL;
+		pcre_extra *extra = NULL;
+		int options = 0;
+		int ovector[150];
+
+		entry = pcre_get_compiled_regex("/^(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){255,})(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){65,}@)(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22))(?:\\.(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z\\d]+(?:-+[a-z\\d]+)*\\.){1,126}){1,}(?:(?:[a-z][a-z\\d]*)|(?:(?:xn--)[a-z\\d]+))(?:-+[a-z\\d]+)*)|(?:\\[(?:(?:IPv6:(?:(?:[a-f\\d]{1,4}(?::[a-f\\d]{1,4}){7})|(?:(?!(?:.*[a-f\d][:\\]]){7,})(?:[a-f\d]{1,4}(?::[a-f\\d]{1,4}){0,5})?::(?:[a-f\\d]{1,4}(?::[a-f\\d]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f\\d]{1,4}(?::[a-f\\d]{1,4}){5}:)|(?:(?!(?:.*[a-f\\d]:){5,})(?:[a-f\\d]{1,4}(?::[a-f\\d]{1,4}){0,3})?::(?:[a-f\\d]{1,4}(?::[a-f\\d]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4]\\d)|(?:1\\d{2})|(?:[1-9]?\\d))(?:\\.(?:(?:25[0-5])|(?:2[0-4]\\d)|(?:1\\d{2})|(?:[1-9]?\\d))){3}))\\]))$/iD", &extra, &options TSRMLS_CC);
+		return entry == NULL||pcre_exec(entry, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE;
+	}
+
+	return FALSE;
 }
 
 BUESSION_API zend_bool validate_isQQ(const char *str TSRMLS_DC){
@@ -919,7 +948,7 @@ BUESSION_API zend_bool validate_isMsn(const char *str TSRMLS_DC){
 	return validate_isMsn_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isMsn_ex(const char *str, uint str_length TSRMLS_DC){
-	return buession_regex_match_ex((char *) str, str_length, ZEND_STRL("VALOIDATE_MSN"), FALSE, 0, NULL TSRMLS_CC);
+	return validate_isMail_ex(str, str_length TSRMLS_CC);
 }
 
 BUESSION_API zend_bool validate_isAlipay(const char *str TSRMLS_DC){
@@ -1560,7 +1589,13 @@ static BUESSION_METHOD(validate, Regex){
 	uint pattern_length;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, 2 TSRMLS_CC, "ss", &str, &str_length, &pattern, &pattern_length) == SUCCESS){
-		RETURN_BOOL(buession_regex_match_ex(str, str_length, pattern, pattern_length, FALSE, 0, NULL TSRMLS_CC));
+		pcre_cache_entry *entry = NULL;
+		pcre_extra *extra = NULL;
+		int options = 0;
+		int ovector[3];
+
+		entry = pcre_get_compiled_regex(pattern, &extra, &options TSRMLS_CC);
+		RETURN_BOOL(entry == NULL||pcre_exec(entry, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE);
 	}
 
 	RETURN_FALSE;
