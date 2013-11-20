@@ -535,7 +535,7 @@ BUESSION_API int buession_write_dimension(HashTable *ht, zval *offset, zval *val
 		goto long_key;
 	}else{
 		zval temp_offset;
-		int (*fn)(HashTable *, char *, uint, zval * TSRMLS_DC) = overwrite == TRUE ? buession_hash_update_zval_ex : buession_hash_add_zval_ex;
+		int (*fn)(HashTable *, const char *, uint, zval * TSRMLS_DC) = overwrite == TRUE ? buession_hash_update_zval_ex : buession_hash_add_zval_ex;
 		int retval;
 
 		BUESSION_CONVERT_VARIABLE_TO_STRING(offset, temp_offset);
