@@ -1594,7 +1594,7 @@ static BUESSION_METHOD(validate, Regex){
 		int ovector[3];
 
 		re = pcre_get_compiled_regex(pattern, &extra, &options TSRMLS_CC);
-		RETURN_BOOL(re == NULL||pcre_exec(re, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE);
+		RETURN_BOOL(re == NULL||pcre_exec(re, NULL, str, str_length, 0, 0, ovector, 3) < 0 ? FALSE : TRUE);
 	}
 
 	RETURN_FALSE;
