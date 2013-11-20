@@ -346,7 +346,8 @@ BUESSION_API zval *buession_string_convert_original_ex(char *value, uint value_l
 	return result;
 }
 
-static inline int buession_object_convert_iterator_to_array_hash(zend_object_iterator *iterator, HashTable *ht TSRMLS_DC){
+static inline int buession_object_convert_iterator_to_array_hash(zend_object_iterator *iterator, void *puser TSRMLS_DC){
+	HashTable *ht;
 	zval **data;
 	char *key;
 	uint key_length;
@@ -358,6 +359,7 @@ static inline int buession_object_convert_iterator_to_array_hash(zend_object_ite
 		return ZEND_HASH_APPLY_STOP;
 	}
 
+	ht = (HashTable *) puser;
 	if(iterator->funcs->get_current_key){
 		key_type = iterator->funcs->get_current_key(iterator, &key, &key_length, &index TSRMLS_CC);
 		if(EG(exception)){
