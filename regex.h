@@ -26,9 +26,6 @@
 BUESSION_API zend_bool buession_regex_match(char *str, char *pattern, zend_bool isglobal, long flags, zval **subparts TSRMLS_DC);
 BUESSION_API zend_bool buession_regex_match_ex(char *str, uint str_length, char *pattern, uint pattern_length, zend_bool isglobal, long flags, zval **subparts TSRMLS_DC);
 
-BUESSION_API zend_bool buession_regex_test(char *str, char *pattern, zend_bool isglobal, long flags, zval **subparts TSRMLS_DC);
-BUESSION_API zend_bool buession_regex_test_ex(char *str, uint str_length, char *pattern, uint pattern_length, zend_bool isglobal, long flags, zval **subparts TSRMLS_DC);
-
 BUESSION_API int buession_regex_split(char *str, char *pattern, int limit, long flags, zval **result TSRMLS_DC);
 BUESSION_API int buession_regex_split_ex(char *str, uint str_length, char *pattern, uint pattern_length, int limit, long flags, zval **result TSRMLS_DC);
 

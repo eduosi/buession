@@ -27,6 +27,7 @@
 #include "ext/standard/url.h"
 #include "ext/date/php_date.h"
 #include "ext/date/lib/timelib.h"
+#include "ext/pcre/php_pcre.h"
 
 /* include buession file */
 #include "buession.h"
@@ -903,7 +904,7 @@ BUESSION_API zend_bool validate_isUrl_ex(const char *str, uint str_length TSRMLS
 
 		if(url->scheme == NULL
 			/* some schemas allow the host to be empty */
-			||(url->host == NULL&&(strcmp(url->scheme, "mailto")&&strcmp(url->scheme, "news")&&strcmp(url->scheme, "file")))){
+			||(url->host == NULL&&(strcmp(url->scheme, "mailto") == 0&&strcmp(url->scheme, "news") == 0&&strcmp(url->scheme, "file") == 0))){
 			failure:
 			php_url_free(url);
 			return FALSE;
@@ -936,9 +937,7 @@ BUESSION_API zend_bool validate_isQQ(const char *str TSRMLS_DC){
 }
 BUESSION_API zend_bool validate_isQQ_ex(const char *str, uint str_length TSRMLS_DC){
 	if(str != NULL&&str_length >= 5&&str_length <= 10){
-		if(*str >= '1'&&*str <= '9'){
-			return validate_isInteger_valid(++str, str_length - 1 TSRMLS_CC);
-		}
+		return (*str >= '1'&&*str <= '9')&&validate_isInteger_valid(++str, str_length - 1 TSRMLS_CC) == TRUE;
 	}
 
 	return FALSE;
