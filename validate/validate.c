@@ -919,6 +919,7 @@ BUESSION_API zend_bool validate_isMail(const char *str TSRMLS_DC){
 	return validate_isMail_ex(str, strlen(str) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isMail_ex(const char *str, uint str_length TSRMLS_DC){
+	/* The maximum length of an e-mail address is 320 octets, per RFC 2821. */
 	if(str_length <= 320){
 		pcre_cache_entry *entry = NULL;
 		pcre_extra *extra = NULL;
