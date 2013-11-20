@@ -415,7 +415,7 @@ BUESSION_API HashTable *buession_zval_convert_to_hash(zval *var TSRMLS_DC){
 
 						ALLOC_HASHTABLE(ht);
 						zend_hash_init(ht, 0, NULL, ZVAL_PTR_DTOR, FALSE);
-						if(spl_iterator_apply(var, buession_object_convert_iterator_to_array_hash, ht TSRMLS_CC) == SUCCESS){
+						if(spl_iterator_apply(var, buession_object_convert_iterator_to_array_hash, (void *) ht TSRMLS_CC) == SUCCESS){
 							return ht;
 						}
 
