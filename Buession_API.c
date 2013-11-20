@@ -269,7 +269,7 @@ BUESSION_API char *buession_get_env(char *name, uint name_length, uint *value_le
 		char *val = getenv(name);
 
 		if(val){
-			value_length = strlen(val);
+			*value_length = strlen(val);
 			return estrndup(val, *value_length);
 		}
 	}
