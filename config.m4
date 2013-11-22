@@ -35,7 +35,6 @@ AC_ARG_ENABLE(buession-debug,
 
 if test "$PHP_BUESSION" != "no"; then
 	AC_MSG_CHECKING([PHP version])
-	AC_MSG_RESULT([$PHP_API_VERSION, ggdfgfdgfdgfdgfdgfdgf])
 
 	tmp_version=$PHP_VERSION
 	if test -z "$tmp_version"; then

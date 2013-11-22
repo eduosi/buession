@@ -412,7 +412,7 @@ ZEND_RINIT_FUNCTION(buession){
 
 /** {{{ ZEND_RSHUTDOWN_FUNCTION */
 ZEND_RSHUTDOWN_FUNCTION(buession){
-	BUESSION_RSHUTDOWN(constant);
+	/*BUESSION_RSHUTDOWN(constant);
 	BUESSION_RSHUTDOWN(exception);
 
 	BUESSION_RSHUTDOWN(assert);
@@ -429,7 +429,7 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(charset);
 
 	zend_hash_clean(&(BUESSION_G(registry).registry));
-	zend_hash_clean(&(BUESSION_G(registry).instances));
+	zend_hash_clean(&(BUESSION_G(registry).instances));*/
 
 	return SUCCESS;
 }
@@ -437,7 +437,7 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 
 /** {{{ ZEND_MSHUTDOWN_FUNCTION */
 ZEND_MSHUTDOWN_FUNCTION(buession){
-	UNREGISTER_INI_ENTRIES();
+	/*UNREGISTER_INI_ENTRIES();
 
 	BUESSION_SHUTDOWN(constant);
 	BUESSION_SHUTDOWN(exception);
@@ -454,7 +454,7 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 		ts_free_id(buession_globals_id);
 	#else
 		buession_destroy_globals(&buession_globals TSRMLS_CC);
-	#endif
+	#endif*/
 
 	return SUCCESS;
 }
