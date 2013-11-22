@@ -412,7 +412,7 @@ ZEND_RINIT_FUNCTION(buession){
 
 /** {{{ ZEND_RSHUTDOWN_FUNCTION */
 ZEND_RSHUTDOWN_FUNCTION(buession){
-	/*BUESSION_RSHUTDOWN(constant);
+	BUESSION_RSHUTDOWN(constant);
 	BUESSION_RSHUTDOWN(exception);
 
 	BUESSION_RSHUTDOWN(assert);
@@ -428,7 +428,7 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(webroot);
 	BUESSION_CLEAN_STRING_G(charset);
 
-	zend_hash_clean(&(BUESSION_G(registry).registry));
+	/*zend_hash_clean(&(BUESSION_G(registry).registry));
 	zend_hash_clean(&(BUESSION_G(registry).instances));*/
 
 	return SUCCESS;
@@ -437,7 +437,7 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 
 /** {{{ ZEND_MSHUTDOWN_FUNCTION */
 ZEND_MSHUTDOWN_FUNCTION(buession){
-	/*UNREGISTER_INI_ENTRIES();
+	UNREGISTER_INI_ENTRIES();
 
 	BUESSION_SHUTDOWN(constant);
 	BUESSION_SHUTDOWN(exception);
@@ -447,7 +447,7 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	zend_hash_destroy(&(BUESSION_G(registry).registry));
+	/*zend_hash_destroy(&(BUESSION_G(registry).registry));
 	zend_hash_destroy(&(BUESSION_G(registry).instances));
 
 	#ifdef ZTS
