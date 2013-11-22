@@ -431,8 +431,8 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(webroot);
 	BUESSION_CLEAN_STRING_G(charset);
 
-	/*zend_hash_clean(&(BUESSION_G(registry).registry));
-	zend_hash_clean(&(BUESSION_G(registry).instances));*/
+	zend_hash_clean(&(BUESSION_G(registry).registry));
+	zend_hash_clean(&(BUESSION_G(registry).instances));
 
 	return SUCCESS;
 }
@@ -450,8 +450,8 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	/*zend_hash_destroy(&(BUESSION_G(registry).registry));
-	zend_hash_destroy(&(BUESSION_G(registry).instances));*/
+	zend_hash_destroy(&(BUESSION_G(registry).registry));
+	zend_hash_destroy(&(BUESSION_G(registry).instances));
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
