@@ -91,7 +91,7 @@ ZEND_INI_END()
 
 BUESSION_API zend_bool buession_instance_exists(zend_class_entry *ce TSRMLS_DC){
 	char *lname = zend_str_tolower_dup(ce->name, ce->name_length);
-	zend_bool result = zend_hash_exists(&(BUESSION_G(registry).instances), lname, ce->name_length + 1);
+	zend_bool result = zend_hash_exists(BUESSION_G(registry).instances, lname, ce->name_length + 1);
 
 	buession_free(lname);
 
@@ -103,7 +103,7 @@ BUESSION_API int buession_instance_add(zend_class_entry *ce, zval *instance TSRM
 	if(instance&&Z_TYPE_P(instance) == IS_OBJECT){
 		char *lname = zend_str_tolower_dup(ce->name, ce->name_length);
 
-		result = zend_hash_add(&(BUESSION_G(registry).instances), lname, ce->name_length + 1, (void *) &instance, sizeof(zval *), NULL);
+		result = zend_hash_add(BUESSION_G(registry).instances, lname, ce->name_length + 1, (void *) &instance, sizeof(zval *), NULL);
 		buession_free(lname);
 	}
 
@@ -116,7 +116,7 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 	char *lclassname = zend_str_tolower_dup(classname, classname_length);
 	zval **instance;
 
-	if(zend_hash_find(&(BUESSION_G(registry).instances), lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
+	if(zend_hash_find(BUESSION_G(registry).instances, lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
 		buession_free(lclassname);
 
@@ -415,9 +415,6 @@ ZEND_RINIT_FUNCTION(buession){
 
 /** {{{ ZEND_RSHUTDOWN_FUNCTION */
 ZEND_RSHUTDOWN_FUNCTION(buession){
-	HashTable *registry = &(BUESSION_G(registry).registry);
-	HashTable *instances = &(BUESSION_G(registry).instances);
-
 	BUESSION_RSHUTDOWN(constant);
 	BUESSION_RSHUTDOWN(exception);
 
@@ -434,8 +431,8 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(webroot);
 	BUESSION_CLEAN_STRING_G(charset);
 
-	zend_hash_clean(registry);
-	zend_hash_clean(instances);
+	zend_hash_clean(BUESSION_G(registry).registry);
+	zend_hash_clean(BUESSION_G(registry).instances);
 
 	return SUCCESS;
 }
@@ -443,9 +440,6 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 
 /** {{{ ZEND_MSHUTDOWN_FUNCTION */
 ZEND_MSHUTDOWN_FUNCTION(buession){
-	HashTable *registry = &(BUESSION_G(registry).registry);
-	HashTable *instances = &(BUESSION_G(registry).instances);
-
 	UNREGISTER_INI_ENTRIES();
 
 	BUESSION_SHUTDOWN(constant);
@@ -456,8 +450,8 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	//zend_hash_destroy(registry);
-	//zend_hash_destroy(instances);
+	zend_hash_destroy(BUESSION_G(registry).registry);
+	zend_hash_destroy(BUESSION_G(registry).instances);
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
@@ -508,8 +502,10 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->charset_length = 0;
 	buession_globals->secure = FALSE;
 
-	zend_hash_init(&(buession_globals->registry.registry), 0, NULL, ZVAL_PTR_DTOR, FALSE);
-	zend_hash_init(&(buession_globals->registry.instances), 0, NULL, ZVAL_PTR_DTOR, FALSE);
+	ALLOC_HASHTABLE(buession_globals->registry.registry);
+	ALLOC_HASHTABLE(buession_globals->registry.instances);
+	zend_hash_init(buession_globals->registry.registry, 0, NULL, ZVAL_PTR_DTOR, FALSE);
+	zend_hash_init(buession_globals->registry.instances, 0, NULL, ZVAL_PTR_DTOR, FALSE);
 }
 /* }}} */
 
