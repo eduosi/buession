@@ -80,7 +80,6 @@ static ZEND_INI_MH(OnUpdateClasspath){
 }
 
 static void buession_destroy_globals(zend_buession_globals *buession_globals TSRMLS_DC){
-	buession_free(buession_globals);
 }
 
 /* {{{ ZEND_INI */
