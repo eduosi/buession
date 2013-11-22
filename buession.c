@@ -415,6 +415,9 @@ ZEND_RINIT_FUNCTION(buession){
 
 /** {{{ ZEND_RSHUTDOWN_FUNCTION */
 ZEND_RSHUTDOWN_FUNCTION(buession){
+	HashTable *registry = &(BUESSION_G(registry).registry);
+	HashTable *instances = &(BUESSION_G(registry).instances);
+
 	BUESSION_RSHUTDOWN(constant);
 	BUESSION_RSHUTDOWN(exception);
 
@@ -431,8 +434,8 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(webroot);
 	BUESSION_CLEAN_STRING_G(charset);
 
-	zend_hash_clean(&(BUESSION_G(registry).registry));
-	zend_hash_clean(&(BUESSION_G(registry).instances));
+	zend_hash_clean(registry);
+	zend_hash_clean(instances);
 
 	return SUCCESS;
 }
@@ -440,6 +443,9 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 
 /** {{{ ZEND_MSHUTDOWN_FUNCTION */
 ZEND_MSHUTDOWN_FUNCTION(buession){
+	HashTable *registry = &(BUESSION_G(registry).registry);
+	HashTable *instances = &(BUESSION_G(registry).instances);
+
 	UNREGISTER_INI_ENTRIES();
 
 	BUESSION_SHUTDOWN(constant);
@@ -450,8 +456,8 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	zend_hash_destroy(&(BUESSION_G(registry).registry));
-	zend_hash_destroy(&(BUESSION_G(registry).instances));
+	zend_hash_destroy(registry);
+	zend_hash_destroy(instances);
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
