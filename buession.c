@@ -448,13 +448,13 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(validate);
 
 	/*zend_hash_destroy(&(BUESSION_G(registry).registry));
-	zend_hash_destroy(&(BUESSION_G(registry).instances));
+	zend_hash_destroy(&(BUESSION_G(registry).instances));*/
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
 	#else
 		buession_destroy_globals(&buession_globals TSRMLS_CC);
-	#endif*/
+	#endif
 
 	return SUCCESS;
 }
