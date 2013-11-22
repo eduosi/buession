@@ -431,8 +431,8 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 	BUESSION_CLEAN_STRING_G(webroot);
 	BUESSION_CLEAN_STRING_G(charset);
 
-	zend_hash_clean(&(BUESSION_G(registry).registry));
-	zend_hash_clean(&(BUESSION_G(registry).instances));
+	//zend_hash_clean(&(BUESSION_G(registry).registry));
+	//zend_hash_clean(&(BUESSION_G(registry).instances));
 
 	return SUCCESS;
 }
