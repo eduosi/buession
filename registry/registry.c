@@ -125,7 +125,7 @@ static BUESSION_METHOD(registry, get){
 
 /* {{{ public array Registry::getAll() */
 static BUESSION_METHOD(registry, getAll){
-	BUESSION_RETURN_HASHTABLE(BUESSION_G(registry).registry);
+	BUESSION_RETURN_HASHTABLE(&(BUESSION_G(registry).registry));
 }
 /* }}} */
 
@@ -144,7 +144,7 @@ static BUESSION_METHOD(registry, delete){
 
 /* {{{ public void Registry::clean() */
 static BUESSION_METHOD(registry, clean){
-	zend_hash_clean(BUESSION_G(registry).registry);
+	zend_hash_clean(&(BUESSION_G(registry).registry));
 }
 /* }}} */
 
