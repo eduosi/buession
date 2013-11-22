@@ -456,8 +456,8 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	zend_hash_destroy(registry);
-	zend_hash_destroy(instances);
+	//zend_hash_destroy(registry);
+	//zend_hash_destroy(instances);
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
