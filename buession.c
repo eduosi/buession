@@ -153,8 +153,9 @@ static ZEND_METHOD(buession, getInstance){
 			RETURN_FALSE;
 		}
 
+		php_printf("\r\npackage: %s\r\n", package);
 		classname = buession_get_package_classname(package, package_length, &classname_length TSRMLS_CC);
-		php_printf("\r\nclassname: %s\r\n");
+		php_printf("\r\nclassname: %s\r\n", classname);
 		return;
 		if(argc == 0){
 			if((instance = buession_instance_find_ex(classname, classname_length TSRMLS_CC)) != NULL){
