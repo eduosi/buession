@@ -153,10 +153,8 @@ static ZEND_METHOD(buession, getInstance){
 			RETURN_FALSE;
 		}
 
-		php_printf("\r\npackage: %s\r\n", package);
+
 		classname = buession_get_package_classname(package, package_length, &classname_length TSRMLS_CC);
-		php_printf("\r\nclassname: %s\r\n", classname);
-		return;
 		if(argc == 0){
 			if((instance = buession_instance_find_ex(classname, classname_length TSRMLS_CC)) != NULL){
 				//LOGGER_INFO("get '%s' instance from cache", package);
@@ -165,6 +163,8 @@ static ZEND_METHOD(buession, getInstance){
 			}
 		}
 
+		php_printf("\r\nclassname: %s\r\n", classname);
+		return;
 		if(zend_lookup_class_ex(classname, classname_length, FALSE, &ce TSRMLS_CC) == SUCCESS){
 			buession_free(classname);
 			instance = buession_getInstance(*ce, NULL, argc, args TSRMLS_CC);
