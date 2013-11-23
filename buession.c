@@ -165,8 +165,6 @@ static ZEND_METHOD(buession, getInstance){
 			}
 		}
 
-		php_printf("\r\nclassname: %s\r\n", package);
-		return;
 		if(zend_lookup_class_ex(classname, classname_length, FALSE, &ce TSRMLS_CC) == SUCCESS){
 			buession_free(classname);
 			instance = buession_getInstance(*ce, NULL, argc, args TSRMLS_CC);
