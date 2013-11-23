@@ -21,11 +21,6 @@
 #ifndef BUESSION_TYPES_H
 #define BUESSION_TYPES_H
 
-typedef struct _buession_registry {
-	HashTable *registry;
-	HashTable *instances;
-} buession_registry;
-
 enum ip_type {
 	IPV4 = 1,
 	IPV6 = 2
