@@ -853,7 +853,7 @@ BUESSION_API zend_bool validate_isIP(const char *str, int type, int flags TSRMLS
 	return validate_isIP_ex(str, strlen(str), type, flags TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type, int flags TSRMLS_DC){
-	php_printf("%ld=>%ld\r\n", type&IPV4, type&IPV6);
+	php_printf("%ld: %ld=>%ld\r\n", type, type&IPV4, type&IPV6);
 	if((type&IPV4)&&validate_isIPV4(str, str_length, flags TSRMLS_CC) == TRUE){
 		return TRUE;
 	}
