@@ -812,13 +812,16 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 
 					if(result == TRUE){
 						if(flags&IP_PRIV_RANGE){
+							PUTS("GG\r\n");
 							if(str_length >=2&&(strncasecmp("FC", str, 2) == 0||strncasecmp("FD", str, 2) == 0)){
+								PUTS("HH\r\n");
 								return FALSE;
 							}
 						}
 
 						if(flags&IP_RES_RANGE){
-							if(str_length == 3&&(memcmp("::1", str, 3) == 0||memcmp("5f:", str, 3) == 3)){
+							PUTS("FF\r\n");
+							if(str_length == 3&&(memcmp("::1", str, 3) == 0||memcmp("5f:", str, 3) == 0)){
 								return FALSE;
 							}
 
@@ -830,6 +833,7 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 								||(str_length >= 2&&strncasecmp("5f", str, 2) == 0)
 								||(str_length >= 4&&strncasecmp("3ff3", str, 4) == 0)
 								||(str_length >= 8&&memcmp("2001:001", str, 8) == 0)){
+								PUTS("MM\r\n");
 								return FALSE;
 							}
 						}
