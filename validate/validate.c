@@ -768,12 +768,14 @@ static inline zend_bool _validate_IPV6_group_valid(const char *str, uint str_len
 	return FALSE;
 }
 static inline zend_bool validate_isIPV6(const char *str, uint str_length, int flags TSRMLS_DC){
+	PUTS("hhh");
 	if(str != NULL&&str_length >= 2){
 		if(str_length == 2){
 			return str[0] == ':'&&str[1] == ':';
 		}else{
 			const char *p = (const char *) memchr(str, ':', str_length);
 
+			PUTS("GGG");
 			if(p != NULL){
 				const char *s = str;
 				const char *end = str + str_length;
