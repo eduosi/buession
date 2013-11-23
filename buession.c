@@ -114,9 +114,14 @@ BUESSION_API zval *buession_instance_find(zend_class_entry *ce TSRMLS_DC){
 }
 BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classname_length TSRMLS_DC){
 	char *lclassname = zend_str_tolower_dup(classname, classname_length);
+	HashTable *instances = &(BUESSION_G(registry).instances);
 	zval **instance;
 
-	if(zend_hash_find(&(BUESSION_G(registry).instances), lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
+	if(!instances){
+		PUTS("GGGGGG\r\n");
+	}
+
+	if(zend_hash_find(instances, lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
 		//buession_free(lclassname);
 
