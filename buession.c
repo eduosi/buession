@@ -120,6 +120,9 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 	if(!instances){
 		PUTS("GGGGGG\r\n");
 	}
+	php_printf("instances size: %ld\r\n", zend_hash_num_elements(instances));
+
+	return NULL;
 
 	if(zend_hash_find(instances, lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
