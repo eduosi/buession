@@ -382,7 +382,7 @@ ZEND_RINIT_FUNCTION(buession){
 		buession_free(ctr.line);
 
 		if(BUESSION_G(root)){
-			BUESSION_G(classpath_length) = spprintf(&BUESSION_G(classpath), 0, "%s%cFramework%cclasses%c", BUESSION_G(root), DEFAULT_SLASH, DEFAULT_SLASH, DEFAULT_SLASH);
+			BUESSION_G(classpath_length) = spprintf(&BUESSION_G(classpath), 0, "%sFramework%cclasses%c", BUESSION_G(root), DEFAULT_SLASH, DEFAULT_SLASH);
 		}else{
 			goto default_classpath;
 		}
