@@ -79,7 +79,7 @@ BUESSION_API zval *buession_throw_exception_error_ex(zend_class_entry *exception
 #define exception__construct(ce, default_message, default_message_length, default_code){	\
 	char *message = default_message;	\
 	uint message_length = default_message_length;	\
-	int code = default_code;	\
+	long code = default_code;	\
 	zval *previous = NULL;	\
 	zend_class_entry *exception_ce = zend_exception_get_default(TSRMLS_C);	\
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "|slO!", &message, &message_length, &code, &previous, exception_ce) == FAILURE){	\

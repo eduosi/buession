@@ -768,14 +768,12 @@ static inline zend_bool _validate_IPV6_group_valid(const char *str, uint str_len
 	return FALSE;
 }
 static inline zend_bool validate_isIPV6(const char *str, uint str_length, int flags TSRMLS_DC){
-	PUTS("hhh");
 	if(str != NULL&&str_length >= 2){
 		if(str_length == 2){
 			return str[0] == ':'&&str[1] == ':';
 		}else{
 			const char *p = (const char *) memchr(str, ':', str_length);
 
-			PUTS("GGG");
 			if(p != NULL){
 				const char *s = str;
 				const char *end = str + str_length;
@@ -814,15 +812,12 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 
 					if(result == TRUE){
 						if(flags&IP_PRIV_RANGE){
-							PUTS("GG\r\n");
 							if(str_length >=2&&(strncasecmp("FC", str, 2) == 0||strncasecmp("FD", str, 2) == 0)){
-								PUTS("HH\r\n");
 								return FALSE;
 							}
 						}
 
 						if(flags&IP_RES_RANGE){
-							PUTS("FF\r\n");
 							if(str_length == 3&&(memcmp("::1", str, 3) == 0||memcmp("5f:", str, 3) == 0)){
 								return FALSE;
 							}
@@ -835,7 +830,6 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 								||(str_length >= 2&&strncasecmp("5f", str, 2) == 0)
 								||(str_length >= 4&&strncasecmp("3ff3", str, 4) == 0)
 								||(str_length >= 8&&memcmp("2001:001", str, 8) == 0)){
-								PUTS("MM\r\n");
 								return FALSE;
 							}
 						}
@@ -853,7 +847,6 @@ BUESSION_API zend_bool validate_isIP(const char *str, int type, int flags TSRMLS
 	return validate_isIP_ex(str, strlen(str), type, flags TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type, int flags TSRMLS_DC){
-	php_printf("%ld: %ld=>%ld\r\n", type, type&IPV4, type&IPV6);
 	if((type&IPV4)&&validate_isIPV4(str, str_length, flags TSRMLS_CC) == TRUE){
 		return TRUE;
 	}
@@ -1305,7 +1298,7 @@ static BUESSION_METHOD(validate, isBlank){
 /* {{{ public boolean Validate::length(mixed $data, integer $length) */
 static BUESSION_METHOD(validate, length){
 	zval *data;
-	int length;
+	long length;
 
 	if(zend_parse_parameters(2 TSRMLS_CC, "zl", &data, &length) == SUCCESS){
 		if(data == NULL||Z_TYPE_P(data) == IS_NULL){
@@ -1502,7 +1495,7 @@ static BUESSION_METHOD(validate, isCurrency){
 static BUESSION_METHOD(validate, isTel){
 	char *str;
 	uint str_length;
-	int flags = TEL_TAIL|TEL_EXTENSION|TEL_SPECIAL;
+	long flags = TEL_TAIL|TEL_EXTENSION|TEL_SPECIAL;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &str, &str_length, &flags) == SUCCESS){
 		RETURN_BOOL(validate_isTel_ex(str, str_length, flags TSRMLS_CC));
@@ -1524,7 +1517,7 @@ static BUESSION_METHOD(validate, isPostCode){
 }
 /* }}} */
 
-/* {{{ public boolean Validate::isIP(string $str[, int $type = IPV4|IPV6, [int $flags = IP_PRIV_RANGE|IP_RES_RANGE]]) */
+/* {{{ public boolean Validate::isIP(string $str[, integer $type = IPV4|IPV6, [integer $flags = IP_PRIV_RANGE|IP_RES_RANGE]]) */
 static BUESSION_METHOD(validate, isIP){
 	char *str;
 	uint str_length;
@@ -1532,7 +1525,6 @@ static BUESSION_METHOD(validate, isIP){
 	long flags = IP_PRIV_RANGE|IP_RES_RANGE;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type, &flags) == SUCCESS){
-		php_printf("%ld=>%ld\r\n", type, flags);
 		RETURN_BOOL(validate_isIP_ex(str, str_length, type, flags TSRMLS_CC));
 	}
 
@@ -1542,7 +1534,7 @@ static BUESSION_METHOD(validate, isIP){
 
 /* {{{ public boolean Validate::isPort(integer $port) */
 static BUESSION_METHOD(validate, isPort){
-	int port;
+	long port;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, 1 TSRMLS_CC, "l", &port) == SUCCESS){
 		RETURN_BOOL(validate_isPort(port TSRMLS_CC));
@@ -1614,7 +1606,7 @@ static BUESSION_METHOD(validate, isIDCard){
 static BUESSION_METHOD(validate, isCreditCard){
 	char *str;
 	uint str_length;
-	int type = 0;
+	long type = 0;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &str, &str_length, &type) == SUCCESS){
 		RETURN_BOOL(validate_isCreditCard_ex(str, str_length, type TSRMLS_CC));
@@ -1628,7 +1620,7 @@ static BUESSION_METHOD(validate, isCreditCard){
 static BUESSION_METHOD(validate, isIsbn){
 	char *str;
 	uint str_length;
-	int type = ISBN_10|ISBN_13;
+	long type = ISBN_10|ISBN_13;
 	char *separator = "-";
 	uint separator_length = 1;
 
