@@ -121,6 +121,7 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 		PUTS("GGGGGG\r\n");
 	}
 	php_printf("instances size: %ld\r\n", zend_hash_num_elements(instances));
+	zend_hash_find(instances, lclassname, classname_length + 1, (void **) &instance);
 
 	return NULL;
 
