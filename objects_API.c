@@ -68,7 +68,6 @@ BUESSION_API int buession_loadClass(char *package, uint package_length TSRMLS_DC
 	}else{
 		smart_str_appendl(&directory, BUESSION_G(classpath), BUESSION_G(classpath_length));
 	}
-	smart_str_appendc(&directory, DEFAULT_SLASH);
 
 	if(package_length == 1&&package[package_length - 1] == '*'){
 		goto dir_load;
