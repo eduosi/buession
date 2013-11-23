@@ -1531,6 +1531,7 @@ static BUESSION_METHOD(validate, isIP){
 	int flags = IP_PRIV_RANGE|IP_RES_RANGE;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type, &flags) == SUCCESS){
+		php_printf("str: %s\r\n", str);
 		RETURN_BOOL(validate_isIP_ex(str, str_length, type, flags TSRMLS_CC));
 	}
 
