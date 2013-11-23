@@ -123,12 +123,13 @@ BUESSION_API int buession_call_function(char *function, uint function_length, ui
 		}	\
 	}
 #define BUESSION_RETVAL_HASHTABLE(ht){	\
+	HashTable *_ht = (ht);	\
 	if(return_value_used){	\
 		if(ht == NULL){	\
 			RETVAL_NULL();	\
 		}else{	\
-			array_init_size(return_value, zend_hash_num_elements(ht));	\
-			zend_hash_copy(Z_ARRVAL_P(return_value), ht, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));	\
+			array_init_size(return_value, zend_hash_num_elements(_ht));	\
+			zend_hash_copy(Z_ARRVAL_P(return_value), _ht, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));	\
 		}	\
 	}	\
 }
