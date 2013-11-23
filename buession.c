@@ -503,8 +503,8 @@ ZEND_GINIT_FUNCTION(buession){
 
 /** {{{ ZEND_GSHUTDOWN_FUNCTION */
 ZEND_GSHUTDOWN_FUNCTION(buession){
-	zend_hash_destroy(&(BUESSION_G(registry).registries));
-	zend_hash_destroy(&(BUESSION_G(registry).instances));
+	zend_hash_destroy(&(buession_globals->registry.registries));
+	zend_hash_destroy(&(buession_globals->registry.instances));
 
 	#ifdef ZTS
 		ts_free_id(buession_globals_id);
