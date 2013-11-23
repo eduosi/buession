@@ -61,8 +61,8 @@ extern zend_class_entry *buession_ce;
 #define BUESSION_RELEASE_VERSION	1
 #define BUESSION_EXTRA_VERSION		"Alpha"
 #define BUESSION_BUILD				""
-#define BUESSION_API_VERSION 		"20090626 "BUESSION_EXTRA_VERSION
-#define BUESSION_REVISION_ID		"$Revision: 20090626 $"
+#define BUESSION_API_VERSION 		ZEND_TOSTR(PHP_API_VERSION)" "BUESSION_EXTRA_VERSION
+#define BUESSION_REVISION_ID		"$Revision: "ZEND_TOSTR(PHP_API_VERSION)" $"
 #define BUESSION_SUPPORT_URL 		"http://www.buession.com/"
 #define BUESSION_SUPPORT_EMAIL 		"webmaster@buession.com"
 

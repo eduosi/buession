@@ -26,6 +26,8 @@ extern zend_class_entry *constant_ce;
 #define BUESSION_CONSTANT_ME(method, arguments, flags) ZEND_ME(buession_constant, method, arguments, flags)
 
 #define constant_register_ip_type_constant(type) zend_declare_class_constant_long(constant_ce, ZEND_STRL("IPV"#type), IPV##type TSRMLS_CC)
+#define constant_register_ip_flags_constant(flags) zend_declare_class_constant_long(constant_ce, ZEND_STRL("IP_"#flags), IP_##flags TSRMLS_CC)
+
 #define constant_register_isbn_type_constant(type) zend_declare_class_constant_long(constant_ce, ZEND_STRL("ISBN_"#type), ISBN_##type TSRMLS_CC)
 #define constant_register_creditcard_type_constant(no, name, name_length){	\
 	char *constant_name;	\

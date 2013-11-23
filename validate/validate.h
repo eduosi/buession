@@ -85,8 +85,8 @@ BUESSION_API zend_bool validate_isMobile_ex(const char *str, uint str_length TSR
 BUESSION_API zend_bool validate_isPostCode(const char *str TSRMLS_DC);	//  check post code
 BUESSION_API zend_bool validate_isPostCode_ex(const char *str, uint str_length TSRMLS_DC);	//  check post code
 
-BUESSION_API zend_bool validate_isIP(const char *str, int type TSRMLS_DC);
-BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type TSRMLS_DC);
+BUESSION_API zend_bool validate_isIP(const char *str, int type, int flags TSRMLS_DC);
+BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type, int flags TSRMLS_DC);
 
 BUESSION_API zend_bool validate_isPort(int port TSRMLS_DC);
 
