@@ -117,21 +117,15 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 	HashTable *instances = BUESSION_G(instances);
 	zval **instance;
 
-	if(!instances){
-		PUTS("GGGGGG\r\n");
-	}
-	php_printf("instances size: %ld\r\n", zend_hash_num_elements(instances));
-	zend_hash_exists(instances, lclassname, classname_length + 1);
-
 	return NULL;
 
 	if(zend_hash_find(instances, lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
-		//buession_free(lclassname);
+		buession_free(lclassname);
 
 		return *instance;
 	}
-	//buession_free(lclassname);
+	buession_free(lclassname);
 
 	return NULL;
 }
@@ -343,6 +337,11 @@ ZEND_MINIT_FUNCTION(buession){
 
 	REGISTER_INI_ENTRIES();
 
+	ALLOC_HASHTABLE(BUESSION_G(registries));
+	ALLOC_HASHTABLE(BUESSION_G(instances));
+	zend_hash_init_ex(BUESSION_G(registries), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
+	zend_hash_init_ex(BUESSION_G(instances), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
+
 	zend_register_auto_global("_GLOBALS", 8, NULL TSRMLS_CC);
 
 	BUESSION_STARTUP(constant);
@@ -501,6 +500,8 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->environment_length = 0;
 	buession_globals->classpath = NULL;
 	buession_globals->classpath_length = 0;
+	buession_globals->registries = NULL;
+	buession_globals->registries = NULL;
 	buession_globals->clientip = NULL;
 	buession_globals->clientip_length = 0;
 	buession_globals->scheme = NULL;
@@ -513,11 +514,6 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->charset = NULL;
 	buession_globals->charset_length = 0;
 	buession_globals->secure = FALSE;
-
-	ALLOC_HASHTABLE(buession_globals->registries);
-	ALLOC_HASHTABLE(buession_globals->instances);
-	zend_hash_init(buession_globals->registries, 0, NULL, ZVAL_PTR_DTOR, FALSE);
-	zend_hash_init(buession_globals->instances, 0, NULL, ZVAL_PTR_DTOR, FALSE);
 }
 /* }}} */
 
