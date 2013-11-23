@@ -1,0 +1,12 @@
+Changes 0.0.1
+												24 Nov 2013
+	*) The first public version.
+	*) Feature: "loadClass" API
+	*) Feature: "getInstance" API
+	*) Feature: "Assert" API
+	*) Feature: "Registry" API
+	*) Feature: The most common validation("Validate") API.
+	*) Feature: define common base exception.
+	*) Feature: define common constant.
+	*) Feature: creditcard dict.
+	*) Feature: domain suffix dict.
