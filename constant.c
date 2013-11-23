@@ -60,6 +60,8 @@ BUESSION_STARTUP_FUNCTION(constant){
 
 	constant_register_ip_type_constant(4);
 	constant_register_ip_type_constant(6);
+	constant_register_ip_flags_constant(PRIV_RANGE);
+	constant_register_ip_flags_constant(RES_RANGE);
 
 	constant_register_isbn_type_constant(10);
 	constant_register_isbn_type_constant(13);

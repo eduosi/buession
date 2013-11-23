@@ -154,6 +154,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isIP_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, str)
 	ZEND_ARG_INFO(FALSE, type)
+	ZEND_ARG_INFO(FALSE, flags)
 ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isPort_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, port)
@@ -685,10 +686,11 @@ BUESSION_API zend_bool validate_isPostCode_ex(const char *str, uint str_length T
 	return FALSE;
 }
 
-static inline zend_bool validate_isIPV4(const char *str, uint str_length TSRMLS_DC){
+static inline zend_bool validate_isIPV4(const char *str, uint str_length, int flags TSRMLS_DC){
 	if(str_length >= 7&&str_length <= 15){
 		const char *end = str + str_length;
 		const char *p = str;
+		int ips[4];
 		int num;
 		int m;
 		int n = 0;
@@ -716,9 +718,31 @@ static inline zend_bool validate_isIPV4(const char *str, uint str_length TSRMLS_
 				return FALSE;
 			}
 
+			ips[n++] = num;
+
 			if(n == 4){
 				return str == end;
 			}else if(p >= end||*(str++) != '.'){
+				return FALSE;
+			}
+		}
+
+		if(flags&IP_PRIV_RANGE){
+			if((ips[0] == 10)
+				||(ips[0] == 172&&(ips[1] >= 16&&ips[1] <= 31))
+				||(ips[0] == 192&&ips[1] == 168)){
+				return FALSE;
+			}
+		}
+
+		if(flags&IP_RES_RANGE){
+			if((ips[0] == 0)
+				||(ips[0] == 127&&ips[1] == 0&&ips[2] == 0&&ips[3] == 1)
+				||(ips[0] == 128&&ips[1] == 0)
+				||(ips[0] == 169&&ips[1] == 254)
+				||(ips[0] == 191&&ips[1] == 255)
+				||(ips[0] == 192&&ips[1] == 0&&ips[2] == 2)
+				||(ips[0] >= 224&&ips[0]<= 255)){
 				return FALSE;
 			}
 		}
@@ -744,7 +768,8 @@ static inline zend_bool _validate_IPV6_group_valid(const char *str, uint str_len
 
 	return FALSE;
 }
-static inline zend_bool validate_isIPV6(const char *str, uint str_length TSRMLS_DC){
+static inline zend_bool validate_isIPV6(const char *str, uint str_length, int flags TSRMLS_DC){
+	PUTS("HHHHKK");
 	if(str != NULL&&str_length >= 2){
 		if(str_length == 2){
 			return str[0] == ':'&&str[1] == ':';
@@ -774,17 +799,49 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length TSRMLS_
 					s = p;
 					++i;
 				}while((p = (const char *) memchr(p, ':', str_length - (p - str))));
-
+				PUTS("MMMM");
 				if(i <= 8&&p < end){	/* last group */
-					l = str_length - (s - str);
+					zend_bool result = FALSE;
 
+					PUTS("HHHH");
+
+					l = str_length - (s - str);
 					if(i <= 7){
-						if(_validate_IPV6_group_valid(s, l TSRMLS_CC) == TRUE||validate_isIPV4(s, l TSRMLS_CC) == TRUE){
-							return TRUE;
+						if(_validate_IPV6_group_valid(s, l TSRMLS_CC) == TRUE||validate_isIPV4(s, l, flags TSRMLS_CC) == TRUE){
+							result = TRUE;
 						}
 					}else if(_validate_IPV6_group_valid(s, l TSRMLS_CC) == TRUE){
-						return TRUE;
+						result = TRUE;
 					}
+
+					if(result == TRUE){
+						if(flags&IP_PRIV_RANGE){
+							PUTS("IP_PRIV_RANGE\r\n");
+							if(str_length >=2&&(strncasecmp("FC", str, 2) == 0||strncasecmp("FD", str, 2) == 0)){
+								return FALSE;
+							}
+						}
+
+						if(flags&IP_RES_RANGE){
+							PUTS("IP_RES_RANGE\r\n");
+							if(str_length == 3&&(memcmp("::1", str, 3) == 0||memcmp("5f:", str, 3) == 3)){
+								return FALSE;
+							}
+
+							if(str_length >= 5&&(strncasecmp("fe8", str, 3) == 0||strncasecmp("fe9", str, 3) == 0||strncasecmp("fea", str, 3) == 0||strncasecmp("feb", str, 3) == 0)){
+								return FALSE;
+							}
+
+							if((str_length >= 9&&strncasecmp("2001:0db8", str, 9) == 0)
+								||(str_length >= 2&&strncasecmp("5f", str, 2) == 0)
+								||(str_length >= 4&&strncasecmp("3ff3", str, 4) == 0)
+								||(str_length >= 8&&memcmp("2001:001", str, 8) == 0)){
+								return FALSE;
+							}
+						}
+					}
+
+					return result;
 				}
 			}
 		}
@@ -792,15 +849,15 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length TSRMLS_
 
 	return FALSE;
 }
-BUESSION_API zend_bool validate_isIP(const char *str, int type TSRMLS_DC){
-	return validate_isIP_ex(str, strlen(str), type TSRMLS_CC);
+BUESSION_API zend_bool validate_isIP(const char *str, int type, int flags TSRMLS_DC){
+	return validate_isIP_ex(str, strlen(str), type, flags TSRMLS_CC);
 }
-BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type TSRMLS_DC){
-	if((type&IPV4)&&validate_isIPV4(str, str_length TSRMLS_CC) == TRUE){
+BUESSION_API zend_bool validate_isIP_ex(const char *str, uint str_length, int type, int flags TSRMLS_DC){
+	if((type&IPV4)&&validate_isIPV4(str, str_length, flags TSRMLS_CC) == TRUE){
 		return TRUE;
 	}
 
-	if((type&IPV6)&&validate_isIPV6(str, str_length TSRMLS_CC) == TRUE){
+	if((type&IPV6)&&validate_isIPV6(str, str_length, flags TSRMLS_CC) == TRUE){
 		return TRUE;
 	}
 
@@ -1466,14 +1523,15 @@ static BUESSION_METHOD(validate, isPostCode){
 }
 /* }}} */
 
-/* {{{ public boolean Validate::isIP(string $str[, int $type = IPV4|IPV6]) */
+/* {{{ public boolean Validate::isIP(string $str[, int $type = IPV4|IPV6, [int $flags = IP_PRIV_RANGE|IP_RES_RANGE]]) */
 static BUESSION_METHOD(validate, isIP){
 	char *str;
 	uint str_length;
 	int type = IPV4|IPV6;
+	int flags = IP_PRIV_RANGE|IP_RES_RANGE;
 
-	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &str, &str_length, &type) == SUCCESS){
-		RETURN_BOOL(validate_isIP_ex(str, str_length, type TSRMLS_CC));
+	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type) == SUCCESS){
+		RETURN_BOOL(validate_isIP_ex(str, str_length, type, flags TSRMLS_CC));
 	}
 
 	RETURN_FALSE;

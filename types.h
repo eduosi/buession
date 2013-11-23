@@ -31,6 +31,11 @@ enum ip_type {
 	IPV6 = 2
 };
 
+enum ip_flags {
+	IP_PRIV_RANGE = 1,
+	IP_RES_RANGE  = 2
+};
+
 enum isbn_type {
 	ISBN_10 = 1,
 	ISBN_13 = 2

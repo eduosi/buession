@@ -335,9 +335,6 @@ ZEND_MINIT_FUNCTION(buession){
 
 	REGISTER_INI_ENTRIES();
 
-	zend_hash_init_ex(&(BUESSION_G(registry).registries), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
-	zend_hash_init_ex(&(BUESSION_G(registry).instances), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
-
 	zend_register_auto_global("_GLOBALS", 8, NULL TSRMLS_CC);
 
 	BUESSION_STARTUP(constant);
@@ -457,15 +454,6 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 
-	zend_hash_destroy(&(BUESSION_G(registry).registries));
-	zend_hash_destroy(&(BUESSION_G(registry).instances));
-
-	#ifdef ZTS
-		ts_free_id(buession_globals_id);
-	#else
-		buession_destroy_globals(&buession_globals TSRMLS_CC);
-	#endif
-
 	return SUCCESS;
 }
 /* }}} */
@@ -496,6 +484,8 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->environment_length = 0;
 	buession_globals->classpath = NULL;
 	buession_globals->classpath_length = 0;
+	zend_hash_init_ex(&(buession_globals->registry.registries), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
+	zend_hash_init_ex(&(buession_globals->registry.instances), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
 	buession_globals->clientip = NULL;
 	buession_globals->clientip_length = 0;
 	buession_globals->scheme = NULL;
@@ -508,6 +498,19 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->charset = NULL;
 	buession_globals->charset_length = 0;
 	buession_globals->secure = FALSE;
+}
+/* }}} */
+
+/** {{{ ZEND_GSHUTDOWN_FUNCTION */
+ZEND_GSHUTDOWN_FUNCTION(buession){
+	zend_hash_destroy(&(BUESSION_G(registry).registries));
+	zend_hash_destroy(&(BUESSION_G(registry).instances));
+
+	#ifdef ZTS
+		ts_free_id(buession_globals_id);
+	#else
+		buession_destroy_globals(&buession_globals TSRMLS_CC);
+	#endif
 }
 /* }}} */
 
@@ -540,7 +543,7 @@ zend_module_entry buession_module_entry = {
 	BUESSION_VERSION,
 	ZEND_MODULE_GLOBALS(buession),
 	ZEND_GINIT(buession),
-	NULL,
+	ZEND_GSHUTDOWN(buession),
 	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
 };
