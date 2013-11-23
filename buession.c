@@ -171,6 +171,7 @@ static ZEND_METHOD(buession, getInstance){
 			//LOGGER_INFO("get '%s' instance from internal", package);
 		}else{
 			if(buession_loadClass(package, package_length TSRMLS_CC) == SUCCESS){
+				php_printf("classname: %s\r\n", classname);
 				if(zend_lookup_class_ex(classname, classname_length, FALSE, &ce TSRMLS_CC) == SUCCESS){
 					buession_free(classname);
 					instance = buession_getInstance(*ce, NULL, argc, args TSRMLS_CC);

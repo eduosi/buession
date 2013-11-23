@@ -115,6 +115,7 @@ BUESSION_API int buession_loadClass(char *package, uint package_length TSRMLS_DC
 			smart_str_0(&directory);
 			path_length = spprintf(&path, 0, "%s%c%s.php", directory.c, DEFAULT_SLASH, filename);
 
+			php_printf("path: %s\r\n", path);
 			result = loader(path, path_length, FALSE TSRMLS_CC);
 			buession_free(path);
 		}
