@@ -26,11 +26,11 @@ extern zend_class_entry *registry_ce;
 #define BUESSION_REGISTRY_ME(method, arguments) ZEND_ME(buession_registry, method, arguments, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 #define BUESSION_REGISTRY_MALIAS(alias, method, arguments) ZEND_MALIAS(buession_registry, alias, method, arguments, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
-#define registry_exists(key, key_length)		zend_hash_exists(&(BUESSION_G(registry).registry), (key), (key_length) + 1)
-#define registry_add(key, key_length, value)	buession_hash_add_zval_ex(&(BUESSION_G(registry).registry), (key), (key_length) + 1, value TSRMLS_CC)
-#define registry_set(key, key_length, value)	buession_hash_update_zval_ex(&(BUESSION_G(registry).registry), (key), (key_length) + 1, value TSRMLS_CC)
-#define registry_find(key, key_length, value)	zend_hash_find(&(BUESSION_G(registry).registry), (key), (key_length) + 1, (void **) &value)
-#define registry_delete(key, key_length)		zend_hash_del(&(BUESSION_G(registry).registry), (key), (key_length) + 1)
+#define registry_exists(key, key_length)		zend_hash_exists(BUESSION_G(registry).registry, (key), (key_length) + 1)
+#define registry_add(key, key_length, value)	buession_hash_add_zval_ex(BUESSION_G(registry).registry, (key), (key_length) + 1, value TSRMLS_CC)
+#define registry_set(key, key_length, value)	buession_hash_update_zval_ex(BUESSION_G(registry).registry, (key), (key_length) + 1, value TSRMLS_CC)
+#define registry_find(key, key_length, value)	zend_hash_find(BUESSION_G(registry).registry, (key), (key_length) + 1, (void **) &value)
+#define registry_delete(key, key_length)		zend_hash_del(BUESSION_G(registry).registry, (key), (key_length) + 1)
 
 BUESSION_STARTUP_FUNCTION(registry);
 BUESSION_RINIT_FUNCTION(registry);
