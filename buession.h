@@ -77,8 +77,7 @@ ZEND_BEGIN_MODULE_GLOBALS(buession)
 	size_t environment_length;
 	char *classpath;
 	size_t classpath_length;
-	HashTable *registries;
-	HashTable *instances;
+	buession_registry registry;
 	const char *clientip;
 	uint clientip_length;
 	const char *scheme;

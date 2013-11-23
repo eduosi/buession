@@ -91,7 +91,7 @@ ZEND_INI_END()
 
 BUESSION_API zend_bool buession_instance_exists(zend_class_entry *ce TSRMLS_DC){
 	char *lname = zend_str_tolower_dup(ce->name, ce->name_length);
-	zend_bool result = zend_hash_exists(BUESSION_G(instances), lname, ce->name_length + 1);
+	zend_bool result = zend_hash_exists(&(BUESSION_G(registry).instances), lname, ce->name_length + 1);
 
 	buession_free(lname);
 
@@ -103,7 +103,7 @@ BUESSION_API int buession_instance_add(zend_class_entry *ce, zval *instance TSRM
 	if(instance&&Z_TYPE_P(instance) == IS_OBJECT){
 		char *lname = zend_str_tolower_dup(ce->name, ce->name_length);
 
-		result = zend_hash_add(BUESSION_G(instances), lname, ce->name_length + 1, (void *) &instance, sizeof(zval *), NULL);
+		result = zend_hash_add(&(BUESSION_G(registry).instances), lname, ce->name_length + 1, (void *) &instance, sizeof(zval *), NULL);
 		buession_free(lname);
 	}
 
@@ -114,12 +114,11 @@ BUESSION_API zval *buession_instance_find(zend_class_entry *ce TSRMLS_DC){
 }
 BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classname_length TSRMLS_DC){
 	char *lclassname = zend_str_tolower_dup(classname, classname_length);
-	HashTable *instances = BUESSION_G(instances);
 	zval **instance;
 
 	return NULL;
 
-	if(zend_hash_find(instances, lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
+	if(zend_hash_find(&(BUESSION_G(registry).instances), lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
 		buession_free(lclassname);
 
@@ -337,10 +336,8 @@ ZEND_MINIT_FUNCTION(buession){
 
 	REGISTER_INI_ENTRIES();
 
-	ALLOC_HASHTABLE(BUESSION_G(registries));
-	ALLOC_HASHTABLE(BUESSION_G(instances));
-	zend_hash_init_ex(BUESSION_G(registries), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
-	zend_hash_init_ex(BUESSION_G(instances), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
+	zend_hash_init_ex(&(BUESSION_G(registry).registries), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
+	zend_hash_init_ex(&(BUESSION_G(registry).instances), 0, NULL, ZVAL_PTR_DTOR, TRUE, FALSE);
 
 	zend_register_auto_global("_GLOBALS", 8, NULL TSRMLS_CC);
 
@@ -500,8 +497,6 @@ ZEND_GINIT_FUNCTION(buession){
 	buession_globals->environment_length = 0;
 	buession_globals->classpath = NULL;
 	buession_globals->classpath_length = 0;
-	buession_globals->registries = NULL;
-	buession_globals->registries = NULL;
 	buession_globals->clientip = NULL;
 	buession_globals->clientip_length = 0;
 	buession_globals->scheme = NULL;
