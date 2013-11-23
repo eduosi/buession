@@ -32,7 +32,8 @@ $ make install
 Configuration
 ------------
 ```
-buession.runtime.environment string default value is null。设置当前运行环境，可根据此值在开发、测试、正式环境时，加载不同的应用配置文件。
+buession.environment string default value is null。设置当前运行环境，可根据此值在开发、测试、正式环境时，加载不同的应用配置文件。
+buession.classpath string default value is null。设置自定义类目录路径，默认为当前目录。
 ```
 
 Version Description
