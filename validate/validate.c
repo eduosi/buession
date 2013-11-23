@@ -712,8 +712,7 @@ static inline zend_bool validate_isIPV4(const char *str, uint str_length, int fl
 				}
 			}
 
-			/* don't allow a leading 0; that introduces octal numbers,
-			 * which we don't support */
+			/* don't allow a leading 0; that introduces octal numbers, which we don't support */
 			if(leading_zero == TRUE&&(num != 0||m > 1)){
 				return FALSE;
 			}
@@ -769,7 +768,6 @@ static inline zend_bool _validate_IPV6_group_valid(const char *str, uint str_len
 	return FALSE;
 }
 static inline zend_bool validate_isIPV6(const char *str, uint str_length, int flags TSRMLS_DC){
-	PUTS("HHHHKK");
 	if(str != NULL&&str_length >= 2){
 		if(str_length == 2){
 			return str[0] == ':'&&str[1] == ':';
@@ -799,11 +797,9 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 					s = p;
 					++i;
 				}while((p = (const char *) memchr(p, ':', str_length - (p - str))));
-				PUTS("MMMM");
+
 				if(i <= 8&&p < end){	/* last group */
 					zend_bool result = FALSE;
-
-					PUTS("HHHH");
 
 					l = str_length - (s - str);
 					if(i <= 7){
@@ -816,14 +812,12 @@ static inline zend_bool validate_isIPV6(const char *str, uint str_length, int fl
 
 					if(result == TRUE){
 						if(flags&IP_PRIV_RANGE){
-							PUTS("IP_PRIV_RANGE\r\n");
 							if(str_length >=2&&(strncasecmp("FC", str, 2) == 0||strncasecmp("FD", str, 2) == 0)){
 								return FALSE;
 							}
 						}
 
 						if(flags&IP_RES_RANGE){
-							PUTS("IP_RES_RANGE\r\n");
 							if(str_length == 3&&(memcmp("::1", str, 3) == 0||memcmp("5f:", str, 3) == 3)){
 								return FALSE;
 							}
@@ -960,7 +954,7 @@ BUESSION_API zend_bool validate_isUrl_ex(const char *str, uint str_length TSRMLS
 
 		if(url->scheme == NULL
 			/* some schemas allow the host to be empty */
-			||(url->host == NULL&&(strcmp(url->scheme, "mailto") == 0&&strcmp(url->scheme, "news") == 0&&strcmp(url->scheme, "file") == 0))){
+			||(url->host == NULL&&(memcmp(url->scheme, ZEND_STRL("mailto")) == 0&&memcmp(url->scheme, ZEND_STRL("news")) == 0&&memcmp(url->scheme, ZEND_STRL("file")) == 0))){
 			failure:
 			php_url_free(url);
 			return FALSE;
@@ -1530,7 +1524,7 @@ static BUESSION_METHOD(validate, isIP){
 	int type = IPV4|IPV6;
 	int flags = IP_PRIV_RANGE|IP_RES_RANGE;
 
-	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type) == SUCCESS){
+	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type, &flags) == SUCCESS){
 		RETURN_BOOL(validate_isIP_ex(str, str_length, type, flags TSRMLS_CC));
 	}
 
