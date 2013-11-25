@@ -138,9 +138,6 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isPrint_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, str)
 ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_INFO_EX(validate_isCurrency_arguments, FALSE, FALSE, 1)
-	ZEND_ARG_INFO(FALSE, str)
-ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isTel_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, str)
 	ZEND_ARG_INFO(FALSE, flags)
@@ -258,8 +255,8 @@ static inline zend_bool validate_ctype_ex(const char *data, int data_length, int
 }
 
 static inline zend_bool validate_isInteger_valid(const char *str, uint str_length TSRMLS_DC){
-	const char *end = str + str_length;
 	const char *p = str;
+	const char *end = str + str_length;
 
 	if(p == end){
 		return FALSE;
@@ -270,10 +267,98 @@ static inline zend_bool validate_isInteger_valid(const char *str, uint str_lengt
 			return FALSE;
 		}
 
-		++p;
+		p++;
 	}
 
 	return TRUE;
+}
+static inline zend_bool validate_isNumeric_valid(zval *data, int type TSRMLS_DC){
+	if(!data){
+	}else if(Z_TYPE_P(data) == IS_LONG){
+		return type&IS_LONG;
+	}else if(Z_TYPE_P(data) == IS_DOUBLE){
+		return type&IS_DOUBLE;
+	}else if(Z_TYPE_P(data) == IS_STRING){
+		switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), NULL, NULL, 0)){
+			case IS_LONG:
+				return (type&IS_LONG) != 0;
+				break;
+			case IS_DOUBLE:
+				return (type&IS_DOUBLE) != 0;
+				break;
+			default:
+				break;
+		}
+	}else if(Z_TYPE_P(data) == IS_OBJECT){
+		if(buession_convert_object_to_string(data TSRMLS_CC) == SUCCESS){
+			zend_bool result = FALSE;
+
+			switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), NULL, NULL, 0)){
+				case IS_LONG:
+					result = (type&IS_LONG) != 0;
+					break;
+				case IS_DOUBLE:
+					result = (type&IS_DOUBLE) != 0;
+					break;
+				default:
+					break;
+			}
+			buession_zval_ptr_dtor(data);
+
+			return result;
+		}
+
+		buession_zval_ptr_dtor(data);
+	}
+
+	return FALSE;
+}
+
+static inline zend_bool validate_isUnsigned_or_isSigned_numeric_valid(zval *data, int type, unsigned short symbol_type TSRMLS_DC){
+	if(!data){
+	}else if(Z_TYPE_P(data) == IS_LONG){
+		return (type&IS_LONG)&&(symbol_type == 1 ? Z_LVAL_P(data) >= 0 : Z_LVAL_P(data) < 0);
+	}else if(Z_TYPE_P(data) == IS_DOUBLE){
+		return (type&IS_DOUBLE)&&(symbol_type == 1 ? Z_DVAL_P(data) >= 0.0 : Z_DVAL_P(data) < 0.0);
+	}else if(Z_TYPE_P(data) == IS_STRING){
+		long l = 0;
+		double d = 0.0;
+
+		switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), &l, &d, 0)){
+			case IS_LONG:
+				return (type&IS_LONG)&&(symbol_type == 1 ? l >= 0 : l < 0);
+				break;
+			case IS_DOUBLE:
+				return (type&IS_DOUBLE)&&(symbol_type == 1 ? d >= 0.0 : d < 0.0);
+				break;
+			default:
+				break;
+		}
+	}else if(Z_TYPE_P(data) == IS_OBJECT){
+		if(buession_convert_object_to_string(data TSRMLS_CC) == SUCCESS){
+			long l = 0;
+			double d = 0.0;
+			zend_bool result = FALSE;
+
+			switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), &l, &d, 0)){
+				case IS_LONG:
+					result = (type&IS_LONG)&&(symbol_type == 1 ? l >= 0 : l < 0);
+					break;
+				case IS_DOUBLE:
+					result = (type&IS_DOUBLE)&&(symbol_type == 1 ? d >= 0.0 : d < 0.0);
+					break;
+				default:
+					break;
+			}
+			buession_zval_ptr_dtor(data);
+
+			return result;
+		}
+
+		buession_zval_ptr_dtor(data);
+	}
+
+	return FALSE;
 }
 
 BUESSION_API zend_bool validate_isNull(zval *data TSRMLS_DC){
@@ -383,121 +468,32 @@ BUESSION_API zend_bool validate_isUpperLetter_ex(const char *str, uint str_lengt
 	return validate_ctype_ex(str, str_length, isupper TSRMLS_CC);
 }
 
-static inline int _validate_numeric_valid(zval *data, int type TSRMLS_DC){
-	if(!data){
-	}else if(Z_TYPE_P(data) == IS_LONG){
-		return type&IS_LONG;
-	}else if(Z_TYPE_P(data) == IS_DOUBLE){
-		return type&IS_DOUBLE;
-	}else if(Z_TYPE_P(data) == IS_STRING){
-		switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), NULL, NULL, 0)){
-			case IS_LONG:
-				return type&IS_LONG;
-				break;
-			case IS_DOUBLE:
-				return type&IS_DOUBLE;
-				break;
-			default:
-				break;
-		}
-	}else if(Z_TYPE_P(data) == IS_OBJECT){
-		if(buession_convert_object_to_string(data TSRMLS_CC) == SUCCESS){
-			zend_bool result = FALSE;
-
-			switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), NULL, NULL, 0)){
-				case IS_LONG:
-					result = type&IS_LONG;
-					break;
-				case IS_DOUBLE:
-					result = type&IS_DOUBLE;
-					break;
-				default:
-					break;
-			}
-			buession_zval_ptr_dtor(data);
-
-			return result;
-		}
-
-		buession_zval_ptr_dtor(data);
-	}
-
-	return FALSE;
-}
-
-static inline int _validate_isUnsigned_or_isSigned_numeric_valid(zval *data, int type, unsigned short symbol_type TSRMLS_DC){
-	if(!data){
-	}else if(Z_TYPE_P(data) == IS_LONG){
-		return (type&IS_LONG)&&(symbol_type == 1 ? Z_LVAL_P(data) >= 0 : Z_LVAL_P(data) < 0);
-	}else if(Z_TYPE_P(data) == IS_DOUBLE){
-		return (type&IS_DOUBLE)&&(symbol_type == 1 ? Z_DVAL_P(data) >= 0.0 : Z_DVAL_P(data) < 0.0);
-	}else if(Z_TYPE_P(data) == IS_STRING){
-		long l = 0;
-		double d = 0.0;
-
-		switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), &l, &d, 0)){
-			case IS_LONG:
-				return (type&IS_LONG)&&(symbol_type == 1 ? l >= 0 : l < 0);
-				break;
-			case IS_DOUBLE:
-				return (type&IS_DOUBLE)&&(symbol_type == 1 ? d >= 0.0 : d < 0.0);
-				break;
-			default:
-				break;
-		}
-	}else if(Z_TYPE_P(data) == IS_OBJECT){
-		if(buession_convert_object_to_string(data TSRMLS_CC) == SUCCESS){
-			long l = 0;
-			double d = 0.0;
-			zend_bool result = FALSE;
-
-			switch(is_numeric_string(Z_STRVAL_P(data), Z_STRLEN_P(data), &l, &d, 0)){
-				case IS_LONG:
-					result = (type&IS_LONG)&&(symbol_type == 1 ? l >= 0 : l < 0);
-					break;
-				case IS_DOUBLE:
-					result = (type&IS_DOUBLE)&&(symbol_type == 1 ? d >= 0.0 : d < 0.0);
-					break;
-				default:
-					break;
-			}
-			buession_zval_ptr_dtor(data);
-
-			return result;
-		}
-
-		buession_zval_ptr_dtor(data);
-	}
-
-	return FALSE;
-}
-
 BUESSION_API zend_bool validate_isNumeric(zval *data TSRMLS_DC){
-	return _validate_numeric_valid(data, IS_LONG|IS_DOUBLE TSRMLS_CC);
+	return validate_isNumeric_valid(data, IS_LONG|IS_DOUBLE TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isUnsignedNumeric(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG|IS_DOUBLE, 1 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG|IS_DOUBLE, 1 TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isSignedNumeric(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG|IS_DOUBLE, 0 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG|IS_DOUBLE, 0 TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isInteger(zval *data TSRMLS_DC){
-	return _validate_numeric_valid(data, IS_LONG TSRMLS_CC);
+	return validate_isNumeric_valid(data, IS_LONG TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isUnsignedInteger(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG, 1 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG, 1 TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isSignedInteger(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG, 0 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_LONG, 0 TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isFloat(zval *data TSRMLS_DC){
-	return _validate_numeric_valid(data, IS_DOUBLE TSRMLS_CC);
+	return validate_isNumeric_valid(data, IS_DOUBLE TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isUnsignedFloat(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_DOUBLE, 1 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_DOUBLE, 1 TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isSignedFloat(zval *data TSRMLS_DC){
-	return _validate_isUnsigned_or_isSigned_numeric_valid(data, IS_DOUBLE, 0 TSRMLS_CC);
+	return validate_isUnsigned_or_isSigned_numeric_valid(data, IS_DOUBLE, 0 TSRMLS_CC);
 }
 
 BUESSION_API zend_bool validate_isAlnum(zval *data TSRMLS_DC){
@@ -519,13 +515,6 @@ BUESSION_API zend_bool validate_isPrint(const char *str TSRMLS_DC){
 }
 BUESSION_API zend_bool validate_isPrint_ex(const char *str, uint str_length TSRMLS_DC){
 	return validate_ctype_ex(str, str_length, isprint TSRMLS_CC);
-}
-
-BUESSION_API zend_bool validate_isCurrency(const char *str TSRMLS_DC){
-	return validate_isCurrency_ex(str, strlen(str) TSRMLS_CC);
-}
-BUESSION_API zend_bool validate_isCurrency_ex(const char *str, uint str_length TSRMLS_DC){
-	return FALSE;//buession_regex_match_ex(str, str_length, ZEND_STRL(VALIDATE_CURRENCY), FALSE, 0, NULL TSRMLS_CC);
 }
 
 static inline zend_bool validate_tel_tail_valid(const char *str, uint str_length TSRMLS_DC){
@@ -872,26 +861,21 @@ BUESSION_API zend_bool validate_isDomain_ex(const char *str, uint str_length TSR
 		if(p != NULL){
 			const char *s = str;
 			const char *end = str + str_length;
-			int c = 0;
 			uint l = 0;
 			uint j = 0;
 			uint i = 1;
 
 			do{
-				l = p - s;
-
-				if(l == 0){
+				if((l = p - s) == 0){
 					return FALSE;
 				}
 
-				c = (int) *(unsigned char *) s;
-				if(isalnum(c) == FALSE){
+				if(isalnum((int) *(unsigned char *) s) == FALSE){
 					return FALSE;
 				}
 
 				for(j = 1; j < l; j++){
-					c = (int) (s[j]);
-					if(isalnum(c) == FALSE&&s[j] != '-'&&s[j] != '_'){
+					if(isalnum((int) (s[j])) == FALSE&&s[j] != '-'&&s[j] != '_'){
 						return FALSE;
 					}
 				}
@@ -1106,166 +1090,125 @@ BUESSION_API zend_bool validate_isCreditCard_ex(const char *str, uint str_length
 	return FALSE;
 }
 
-static inline zend_bool validate_isIsbn_10_valid(const char *str, uint str_length, const char *separator, uint separator_length TSRMLS_DC){
-	uint i = 0;
-	uint j = 0;
-	char lash_ch = str[str_length - 1];
-	uint sum = 0;
-	uint checksum = 0;
-	char ch;
-
-	if(separator == NULL&&separator_length == 0){
-		if(str_length != 10){
-			return FALSE;
-		}
-
-		if((lash_ch < '0'||lash_ch > '9')&&lash_ch != 'X'){
-			return FALSE;
-		}
-
-		for(; i < 9; i++){
-			if(str[i] < '0'||str[i] > '9'){
-				return FALSE;
-			}
-		}
+static inline zend_bool validate_isIsbn_10_valid(const char *str, uint str_length, char separator TSRMLS_DC){
+	if(str_length != 10&&str_length != 13){
+		return FALSE;
 	}else{
-		uint sl = 0;
-		uint gl = 0;
+		const char *p = str;
+		const char *end = str + str_length;
+		zend_bool isAll = strpbrk(str, "- ") == NULL;
+		zend_bool hasSeparator = separator != '\0';
+		uint i = 1;
+		uint m = 0;
+		uint j = 0;
+		uint sum = 0;
+		uint checksum = 0;
 
-		if(str_length != 13){
-			return FALSE;
-		}
-
-		if(*str < '0'||*str > '9'||((lash_ch < '0'||lash_ch > '9')&&lash_ch != 'X')){
-			return FALSE;
-		}
-
-		for(i = 1; i < 12; i++){
-			if(sl > 3||gl > 7){
+		while(p < end&&i < str_length){
+			if(*p < '0'||*p > '9'){
 				return FALSE;
 			}
 
-			if(str[i] == *separator){
-				if(str[i - 1] == *separator){
+			sum += (10 - j++) * (*p - '0');
+			++p;
+			++i;
+
+			while(p < end&&i < str_length&&(*p >= '0'&&*p <= '9')){
+				sum += (10 - j++) * (*p - '0');
+				++p;
+				++i;
+			}
+
+			if(isAll == FALSE){
+				m++;
+				if(m == 4){
+					goto finish;
+				}else if(p >= end||(hasSeparator == TRUE&&*(p++) != separator)){
 					return FALSE;
 				}
-
-				++sl;
-				gl = 0;
-				continue;
-			}else if(str[i] < '0'||str[i] > '9'){
-				return FALSE;
-			}else{
-				++gl;
 			}
+
+			++i;
 		}
 
-		if(sl != 3){
-			return FALSE;
+		finish:
+		checksum = 11 - sum % 11;
+		switch(checksum){
+			case 11:
+				return *p == '0';
+				break;
+			case 10:
+				return *p == 'X';
+				break;
+			default:
+				return *p == checksum + '0';
+				break;
 		}
 	}
 
-	for(i = 0; i < str_length; i++){
-		if(j == 9){
-			break;
-		}
-
-		if(str[i] == *separator){
-			continue;
-		}
-
-		sum += (10 - j++) * (str[i] - '0');
-	}
-
-	checksum = 11 - (sum % 11);
-	switch(checksum){
-		case 11:
-			ch = '0';
-			break;
-		case 10:
-			ch = 'X';
-			break;
-		default:
-			ch = checksum + '0';
-			break;
-	}
-
-	return ch == lash_ch;
+	return FALSE;
 }
-static inline zend_bool validate_isIsbn_13_valid(const char *str, uint str_length, const char *separator, uint separator_length TSRMLS_DC){
-	uint i = 0;
-	uint j = 0;
-	uint sum = 0;
-	uint checksum = 0;
-
-	if(separator == NULL&&separator_length == 0){
-		if(str_length != 13||validate_isInteger_valid(str, str_length TSRMLS_CC) == FALSE){
-			return FALSE;
-		}
+static inline zend_bool validate_isIsbn_13_valid(const char *str, uint str_length, char separator TSRMLS_DC){
+	if(str_length != 13&&str_length != 17){
+		return FALSE;
 	}else{
-		uint sl = 0;
-		uint gl = 0;
+		const char *p = str;
+		const char *end = str + str_length;
+		zend_bool isAll = strpbrk(str, "- ") == NULL;
+		zend_bool hasSeparator = separator != '\0';
+		uint i = 1;
+		uint m = 0;
+		uint j = 0;
+		uint sum = 0;
+		uint checksum = 0;
 
-		if(str_length != 17){
-			return FALSE;
-		}
-
-		if(*str < '0'||*str > '9'){
-			return FALSE;
-		}
-
-		for(i = 1; i < str_length; i++){
-			if(sl > 4||(sl == 1&&gl > 5)||gl > 9){
+		while(p < end&&i < str_length){
+			if(*p < '0'||*p > '9'){
 				return FALSE;
 			}
 
-			if(str[i] == *separator){
-				if(str[i - 1] == *separator){
+			sum += (j++) % 2 == 0 ? (*p - '0') : 3 * (*p - '0');
+			++p;
+			++i;
+
+			while(p < end&&i < str_length&&(*p >= '0'&&*p <= '9')){
+				sum += (j++) % 2 == 0 ? (*p - '0') : 3 * (*p - '0');
+				++p;
+				++i;
+			}
+
+			if(isAll == FALSE){
+				m++;
+				if(m == 5){
+					goto finish;
+				}else if(p >= end||(hasSeparator == TRUE&&*(p++) != separator)){
 					return FALSE;
 				}
-
-				++sl;
-				gl = 0;
-				continue;
-			}else if(str[i] < '0'||str[i] > '9'){
-				return FALSE;
-			}else{
-				++gl;
 			}
+
+			++i;
 		}
 
-		if(sl != 4){
-			return FALSE;
-		}
+		finish:
+		checksum = 10 - sum % 10;
+		return (checksum == 10 ? '0' : checksum + '0') == *p;
 	}
-
-	for(i = 0; i < str_length; i++){
-		if(j == 12){
-			break;
-		}
-
-		if(str[i] == *separator){
-			continue;
-		}
-
-		sum += j++ % 2 == 0 ? (str[i] - '0') : 3 * (str[i] - '0');
-	}
-
-	checksum = 10 - (sum % 10);
-
-	return checksum == 10 ? '0' : checksum + '0' == str[str_length - 1];
 }
 BUESSION_API zend_bool validate_isIsbn(const char *str, int type, const char *separator TSRMLS_DC){
 	return validate_isIsbn_ex(str, strlen(str), type, separator, strlen(separator) TSRMLS_CC);
 }
 BUESSION_API zend_bool validate_isIsbn_ex(const char *str, uint str_length, int type, const char *separator, uint separator_length TSRMLS_DC){
 	if(str&&str_length > 0){
-		if((type&ISBN_10)&&validate_isIsbn_10_valid(str, str_length, separator, separator_length TSRMLS_CC) == TRUE){
-			return TRUE;
-		}
+		if(separator == NULL||(separator != NULL&&separator_length == 1&&(*separator == '-'||*separator == ' '))){
+			char sep = separator == NULL ? '\0' : *separator;
 
-		if((type&ISBN_13)&&validate_isIsbn_13_valid(str, str_length, separator, separator_length TSRMLS_CC) == TRUE){
-			return TRUE;
+			if((type&ISBN_10)&&validate_isIsbn_10_valid(str, str_length, sep TSRMLS_CC) == TRUE){
+				return TRUE;
+			}
+
+			if((type&ISBN_13)&&validate_isIsbn_13_valid(str, str_length, sep TSRMLS_CC) == TRUE){
+				return TRUE;
+			}
 		}
 	}
 
@@ -1485,12 +1428,6 @@ static BUESSION_METHOD(validate, isPrint){
 }
 /* }}} */
 
-/* {{{ public boolean Validate::isCurrency(string $str) */
-static BUESSION_METHOD(validate, isCurrency){
-	validate_string_simple_valid_method(validate_isCurrency_ex, TRUE);
-}
-/* }}} */
-
 /* {{{ public boolean Validate::isTel(string $str[, int $flags = TEL_TAIL|TEL_EXTENSION|TEL_SPECIAL]) */
 static BUESSION_METHOD(validate, isTel){
 	char *str;
@@ -1700,7 +1637,6 @@ static zend_function_entry validate_methods[] = {
 	BUESSION_VALIDATE_ME(isCntrl, validate_isCntrl_arguments)
 	BUESSION_VALIDATE_ME(isPrint, validate_isPrint_arguments)
 	BUESSION_VALIDATE_MALIAS(isPrintable, isPrint, validate_isPrint_arguments)
-	//BUESSION_VALIDATE_ME(isCurrency, validate_isCurrency_arguments)
 	//BUESSION_VALIDATE_ME(isTel, validate_isTel_arguments)
 	//BUESSION_VALIDATE_MALIAS(isFax, isTel, validate_isTel_arguments)
 	BUESSION_VALIDATE_ME(isMobile, validate_isMobile_arguments)
