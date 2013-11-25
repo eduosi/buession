@@ -116,8 +116,6 @@ BUESSION_API zval *buession_instance_find_ex(const char *classname, uint classna
 	char *lclassname = zend_str_tolower_dup(classname, classname_length);
 	zval **instance;
 
-	return NULL;
-
 	if(zend_hash_find(&(BUESSION_G(registry).instances), lclassname, classname_length + 1, (void **) &instance) == SUCCESS&&Z_TYPE_PP(instance) == IS_OBJECT){
 		Z_ADDREF_PP(instance);
 		buession_free(lclassname);
@@ -463,7 +461,7 @@ ZEND_MINFO_FUNCTION(buession){
 	php_info_print_table_start();
 	php_info_print_table_header(2, "buession support", "enabled");
 	php_info_print_table_row(2, "Name", BUESSION);
-	php_info_print_table_row(2, "Version", BUESSION_VERSION);
+	php_info_print_table_row(2, "Version", BUESSION_VERSION" "BUESSION_EXTRA_VERSION);
 	if(BUESSION_BUILD[0] != '\0'){
 		php_info_print_table_row(2, "Build", BUESSION_BUILD);
 	}
