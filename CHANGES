@@ -1,3 +1,7 @@
+Changes 0.0.1 Release
+												25 Nov 2013
+	*) Bugfix: 删除 Buession::getInstance 内部 API 测试代码
+
 Changes 0.0.1 Alpha
 												25 Nov 2013
 	*) Bugfix: 修正 ISBN 验证效率
