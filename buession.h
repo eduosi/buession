@@ -55,11 +55,11 @@ extern zend_class_entry *buession_ce;
 #define BUESSION_STATIC_ME(method, arguments)	ZEND_ME(buession, method, arguments, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 #define BUESSION 					"Buession"
-#define BUESSION_VERSION 			"0.0.1 Alpha"
 #define BUESSION_MAJOR_VERSION		0
 #define BUESSION_MINOR_VERSION		0
 #define BUESSION_RELEASE_VERSION	1
-#define BUESSION_EXTRA_VERSION		"Alpha"
+#define BUESSION_EXTRA_VERSION		"Beta"
+#define BUESSION_VERSION 			"0.0.1 "BUESSION_EXTRA_VERSION
 #define BUESSION_BUILD				""
 #define BUESSION_API_VERSION 		ZEND_TOSTR(PHP_API_VERSION)" "BUESSION_EXTRA_VERSION
 #define BUESSION_REVISION_ID		"$Revision: "ZEND_TOSTR(PHP_API_VERSION)" $"
