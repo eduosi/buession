@@ -1,14 +1,16 @@
 Changes 0.0.1 Alpha
+												25 Nov 2013
+	*) Bugfix: 修正 ISBN 验证效率
 
 Changes 0.0.1 Alpha
 												24 Nov 2013
 	*) The first public version.
-	*) Feature: "loadClass" API
-	*) Feature: "getInstance" API
-	*) Feature: "Assert" API
-	*) Feature: "Registry" API
-	*) Feature: The most common validation("Validate") API.
-	*) Feature: define common base exception.
-	*) Feature: define common constant.
-	*) Feature: creditcard dict.
-	*) Feature: domain suffix dict.
+	*) Feature: 实现获取类类文件加载（Buession::loadClass）
+	*) Feature: 实现获取类实例 API（Buession::getInstance）
+	*) Feature: 实现 "Assert" API
+	*) Feature: 实现注册表 API（Registry）
+	*) Feature: 实现大部分数据验证 API（"Validate"）
+	*) Feature: 定义通用异常（Exception）
+	*) Feature: 定义通用常量
+	*) Feature: 定义信用卡词典
+	*) Feature: 定义域名后缀词典
