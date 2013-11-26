@@ -138,10 +138,6 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isPrint_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, str)
 ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_INFO_EX(validate_isTel_arguments, FALSE, FALSE, 1)
-	ZEND_ARG_INFO(FALSE, str)
-	ZEND_ARG_INFO(FALSE, flags)
-ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(validate_isMobile_arguments, FALSE, FALSE, 1)
 	ZEND_ARG_INFO(FALSE, str)
 ZEND_END_ARG_INFO()
@@ -258,7 +254,7 @@ static inline zend_bool validate_isInteger_valid(const char *str, uint str_lengt
 	const char *p = str;
 	const char *end = str + str_length;
 
-	if(p == end){
+	if(str_length == 0||p == end){
 		return FALSE;
 	}
 
@@ -267,7 +263,7 @@ static inline zend_bool validate_isInteger_valid(const char *str, uint str_lengt
 			return FALSE;
 		}
 
-		p++;
+		++p;
 	}
 
 	return TRUE;
@@ -370,14 +366,17 @@ BUESSION_API zend_bool validate_isBlank(const char *str TSRMLS_DC){
 }
 BUESSION_API zend_bool validate_isBlank_ex(const char *str, uint str_length TSRMLS_DC){
 	if(str != NULL&&str_length != 0){
-		uint i = 0;
 		char *character = " \t\r\n\013\014";
 		uint character_length = sizeof(" \t\r\n\013\014") - 1;
+		const char *p = str;
+		const char *end = str + str_length;
 
-		for(; i < str_length; i++){
-			if(memchr(character, str[i], character_length) == NULL){
+		while(p < end){
+			if(memchr(character, *p, character_length) == NULL){
 				return FALSE;
 			}
+
+			++p;
 		}
 	}
 
@@ -517,114 +516,6 @@ BUESSION_API zend_bool validate_isPrint_ex(const char *str, uint str_length TSRM
 	return validate_ctype_ex(str, str_length, isprint TSRMLS_CC);
 }
 
-static inline zend_bool validate_tel_tail_valid(const char *str, uint str_length TSRMLS_DC){
-	if(str != NULL&&str_length > 0){
-		const char *p = str;
-		const char *end = str + str_length;
-
-		if(*p == '0'){
-			if(str_length < 3||str_length > 4){
-				return FALSE;
-			}
-
-			++p;
-			if(*p < '1'||*p > '9'){
-				return FALSE;
-			}
-
-			++p;
-			if(validate_isInteger_valid(p, str_length - (p - str) TSRMLS_CC) == TRUE){
-				return TRUE;
-			}
-		}else if(*p == '8'){
-			if(str_length < 4||str_length > 5){
-				return FALSE;
-			}
-
-			++p;
-			if(*p != '6'){
-				return FALSE;
-			}
-
-			++p;
-			if(validate_isInteger_valid(p, str_length - (p - str) TSRMLS_CC) == TRUE){
-				return TRUE;
-			}
-		}
-	}
-
-	return FALSE;
-}
-BUESSION_API zend_bool validate_isTel(const char *str, int flags TSRMLS_DC){
-	return validate_isTel_ex(str, strlen(str), flags TSRMLS_CC);
-}
-BUESSION_API zend_bool validate_isTel_ex(const char *str, uint str_length, int flags TSRMLS_DC){
-	if(str != NULL&&str_length > 2){
-		const char *p = str;
-		const char *end = str + str_length;
-
-		/*if(flags&TEL_TAIL){
-			char *a = NULL;
-
-			if(*p == '('){
-				if((a = (char *) memchr(p, ')', str_length)) == NULL){
-					return FALSE;
-				}
-
-				++p;
-				if(validate_tel_tail_valid(p, a - p TSRMLS_CC) == FALSE){
-					return FALSE;
-				}
-			}else if(*p >= '0'&&*p <= '9'){
-				if((a = (char *) memchr(p, '-', str_length)) == NULL){
-					return FALSE;
-				}
-
-				if(validate_tel_tail_valid(p, a - str TSRMLS_CC) == FALSE){
-					return FALSE;
-				}
-			}else{
-				return FALSE;
-			}
-
-			++a;
-			p = a;
-		}
-
-		if(p < end){
-			if(*p < '1'||*p > '9'){
-				return FALSE;
-			}
-
-			++p;
-			if(p < end){
-				char *line = (char *) memchr(p, '-', str_length - (p - str));
-				uint l = line == NULL ? str_length - (p - str) : line - p;
-
-				if(l < 6|| l > 7||(line == NULL&&(flags&TEL_EXTENSION))){
-					return FALSE;
-				}
-
-				if(validate_isInteger_valid(p, l TSRMLS_CC) == FALSE){
-					return FALSE;
-				}
-
-				if(flags&TEL_EXTENSION){
-					if(++line < end){
-						l = str_length - (line - str);
-						if(l >= 1&&l <= 5){
-							return validate_isInteger_valid(line, l TSRMLS_CC);
-						}
-					}
-				}else{
-					return TRUE;
-				}
-			}
-		}*/
-	}
-
-	return FALSE;
-}
 BUESSION_API zend_bool validate_isMobile(const char *str TSRMLS_DC){
 	return validate_isMobile_ex(str, strlen(str) TSRMLS_CC);
 }
@@ -1428,20 +1319,6 @@ static BUESSION_METHOD(validate, isPrint){
 }
 /* }}} */
 
-/* {{{ public boolean Validate::isTel(string $str[, int $flags = TEL_TAIL|TEL_EXTENSION|TEL_SPECIAL]) */
-static BUESSION_METHOD(validate, isTel){
-	char *str;
-	uint str_length;
-	long flags = TEL_TAIL|TEL_EXTENSION|TEL_SPECIAL;
-
-	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &str, &str_length, &flags) == SUCCESS){
-		RETURN_BOOL(validate_isTel_ex(str, str_length, flags TSRMLS_CC));
-	}
-
-	RETURN_FALSE;
-}
-/* }}} */
-
 /* {{{ public boolean Validate::isMobile(string $str) */
 static BUESSION_METHOD(validate, isMobile){
 	validate_string_simple_valid_method(validate_isMobile_ex, TRUE);
@@ -1454,12 +1331,12 @@ static BUESSION_METHOD(validate, isPostCode){
 }
 /* }}} */
 
-/* {{{ public boolean Validate::isIP(string $str[, integer $type = IPV4|IPV6, [integer $flags = IP_PRIV_RANGE|IP_RES_RANGE]]) */
+/* {{{ public boolean Validate::isIP(string $str[, integer $type = IPV4|IPV6, [integer $flags = 0]]) */
 static BUESSION_METHOD(validate, isIP){
 	char *str;
 	uint str_length;
 	long type = IPV4|IPV6;
-	long flags = IP_PRIV_RANGE|IP_RES_RANGE;
+	long flags = 0;
 
 	if(zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, ZEND_NUM_ARGS() TSRMLS_CC, "s|ll", &str, &str_length, &type, &flags) == SUCCESS){
 		RETURN_BOOL(validate_isIP_ex(str, str_length, type, flags TSRMLS_CC));
@@ -1637,8 +1514,6 @@ static zend_function_entry validate_methods[] = {
 	BUESSION_VALIDATE_ME(isCntrl, validate_isCntrl_arguments)
 	BUESSION_VALIDATE_ME(isPrint, validate_isPrint_arguments)
 	BUESSION_VALIDATE_MALIAS(isPrintable, isPrint, validate_isPrint_arguments)
-	//BUESSION_VALIDATE_ME(isTel, validate_isTel_arguments)
-	//BUESSION_VALIDATE_MALIAS(isFax, isTel, validate_isTel_arguments)
 	BUESSION_VALIDATE_ME(isMobile, validate_isMobile_arguments)
 	BUESSION_VALIDATE_ME(isPostCode, validate_isPostCode_arguments)
 	BUESSION_VALIDATE_ME(isIP, validate_isIP_arguments)

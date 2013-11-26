@@ -188,7 +188,6 @@ static void assert_std_hasLength(zval *expression, char *message, uint message_l
 		if(buession_convert_object_to_string(temp TSRMLS_CC) == SUCCESS){
 			hasToString = TRUE;
 			if(Z_STRLEN_P(temp) == 0){
-				buession_zval_dtor(temp);
 				goto property;
 			}
 

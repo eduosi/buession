@@ -41,13 +41,6 @@ enum isbn_type {
 	ISBN_13 = 2
 };
 
-enum tel_flags {
-	TEL_TAIL 			= 1,
-	TEL_EXTENSION 		= 2,
-	TEL_SPECIAL 		= 4,
-	TEL_FORCE_SEGMENT	= 8
-};
-
 #endif /* BUESSION_TYPES_H */
 
 /*

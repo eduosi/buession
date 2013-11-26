@@ -1,8 +1,13 @@
+Changes 0.1.0 Alpha
+												25 Nov 2013
+	*) Change：修改 IP 验证 flags 默认值为：0，即将原来的默认不允许为保留 IP，修改为默认允许为保留 IP
+	*) Change：删除电话号码验证内部 API 和相关数据结构
+
 Changes 0.0.1 Release
 												25 Nov 2013
 	*) Bugfix: 删除 Buession::getInstance 内部 API 测试代码
 
-Changes 0.0.1 Alpha
+Changes 0.0.1 Beta
 												25 Nov 2013
 	*) Bugfix: 修正 ISBN 验证效率
 

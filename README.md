@@ -16,18 +16,18 @@ PHP Version >= 5.3
 Download
 ------------
 https://github.com/eduosi/buession/releases
+
 http://git.oschina.net/eduosi/buession/repository/tags
 
 latest source code:
+
 git clone ssh://git@github.com:eduosi/buession.git
+
 git clone ssh://git@git.oschina.net:eduosi/buession.git
 
 
 Installation
 ------------
-Buession Framework can be downloaded at https://github.com/eduosi/buession/releases . 你也可以从 GitHub（https://github.com/eduosi/buession） checkout 最新代码。
-
-Buession Framework install:
 ```
 $ cd buession
 $ php_installed_path/bin/phpize

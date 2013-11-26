@@ -74,8 +74,6 @@ BUESSION_API zend_bool validate_isCntrl_ex(const char *str, uint str_length TSRM
 BUESSION_API zend_bool validate_isPrint(const char *str TSRMLS_DC);	//  check print string
 BUESSION_API zend_bool validate_isPrint_ex(const char *str, uint str_length TSRMLS_DC);	//  check print string
 
-BUESSION_API zend_bool validate_isTel(const char *str, int flags TSRMLS_DC);	//  check tel
-BUESSION_API zend_bool validate_isTel_ex(const char *str, uint str_length, int flags TSRMLS_DC);	//  check tel
 BUESSION_API zend_bool validate_isMobile(const char *str TSRMLS_DC);	//  check mobile
 BUESSION_API zend_bool validate_isMobile_ex(const char *str, uint str_length TSRMLS_DC);	//  check mobile
 
