@@ -1,7 +1,8 @@
-Changes 0.1.0 Alpha
+Changes 1.0.0 Alpha
 												25 Nov 2013
 	*) Change：修改 IP 验证 flags 默认值为：0，即将原来的默认不允许为保留 IP，修改为默认允许为保留 IP
 	*) Change：删除电话号码验证内部 API 和相关数据结构
+	*) Change：调整 Validate::isBlank 内部 API
 
 Changes 0.0.1 Release
 												25 Nov 2013
