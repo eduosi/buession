@@ -193,6 +193,22 @@ SOURCE=./calendar/calendar.c
 # End Source File
 
 # Begin Source File
+SOURCE=./helper/helper.c
+# End Source File
+
+# Begin Source File
+SOURCE=./helper/html.c
+# End Source File
+
+# Begin Source File
+SOURCE=./helper/form.c
+# End Source File
+
+# Begin Source File
+SOURCE=./math/math.c
+# End Source File
+
+# Begin Source File
 SOURCE=./registry/registry.c
 # End Source File
 
@@ -301,6 +317,22 @@ SOURCE=./assert/assert.h
 
 # Begin Source File
 SOURCE=./calendar/calendar.h
+# End Source File
+
+# Begin Source File
+SOURCE=./helper/helper.h
+# End Source File
+
+# Begin Source File
+SOURCE=./helper/html.h
+# End Source File
+
+# Begin Source File
+SOURCE=./helper/form.h
+# End Source File
+
+# Begin Source File
+SOURCE=./math/math.h
 # End Source File
 
 # Begin Source File

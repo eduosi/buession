@@ -69,7 +69,9 @@ if test "$PHP_BUESSION" != "no"; then
 		dict/creditcard/diners_club_us.c dict/creditcard/diners_club.c dict/creditcard/discover.c \
 		dict/creditcard/jcb.c dict/creditcard/laser.c dict/creditcard/maestro.c dict/creditcard/mastercard.c \
 		dict/creditcard/solo.c dict/creditcard/uniopay.c dict/creditcard/visa.c \
-		assert/assert.c calendar/calendar.c registry/registry.c \
+		assert/assert.c calendar/calendar.c \
+		helper/helper.c helper/html.c helper/form.c \
+		math/math.c registry/registry.c \
 		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
 
 	PHP_ADD_BUILD_DIR($ext_builddir/dict)

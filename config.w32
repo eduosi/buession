@@ -6,7 +6,9 @@ ARG_ENABLE("buession-debug", "Enable Buession Debug Support", "no");
 
 if(PHP_BUESSION != "no"){
 	EXTENSION("buession", "buession.c alloc.c types.c Buession_API.c variable.c regex.c hash.c objects_API.c constant.c exception.c" + 
-		"assert/assert.c calendar/calendar.c registry/registry.c" + 
+		"assert/assert.c calendar/calendar.c " + 
+		"helper/helper.c helper/html.c helper/form.c " + 
+		"math/math.c registry/registry.c" + 
 		"validate/validate.c ");
 		
 	ADD_SOURCES("ext/buession/dict/creditcard", "creditcard.c \

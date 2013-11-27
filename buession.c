@@ -36,6 +36,8 @@
 #include "buession.h"
 #include "assert/assert.h"
 #include "calendar/calendar.h"
+#include "helper/helper.h"
+#include "math/math.h"
 #include "registry/registry.h"
 #include "validate/validate.h"
 
@@ -340,6 +342,8 @@ ZEND_MINIT_FUNCTION(buession){
 
 	BUESSION_STARTUP(assert);
 	BUESSION_STARTUP(calendar);
+	BUESSION_STARTUP(helper);
+	BUESSION_STARTUP(math);
 	BUESSION_STARTUP(registry);
 	BUESSION_STARTUP(validate);
 
@@ -408,6 +412,8 @@ ZEND_RINIT_FUNCTION(buession){
 
 	BUESSION_RSTARTUP(assert);
 	BUESSION_RSTARTUP(calendar);
+	BUESSION_RSTARTUP(helper);
+	BUESSION_RSTARTUP(math);
 	BUESSION_RSTARTUP(registry);
 	BUESSION_RSTARTUP(validate);
 
@@ -422,6 +428,8 @@ ZEND_RSHUTDOWN_FUNCTION(buession){
 
 	BUESSION_RSHUTDOWN(assert);
 	BUESSION_RSHUTDOWN(calendar);
+	BUESSION_RSHUTDOWN(helper);
+	BUESSION_RSHUTDOWN(math);
 	BUESSION_RSHUTDOWN(registry);
 	BUESSION_RSHUTDOWN(validate);
 
@@ -449,6 +457,8 @@ ZEND_MSHUTDOWN_FUNCTION(buession){
 
 	BUESSION_SHUTDOWN(assert);
 	BUESSION_SHUTDOWN(calendar);
+	BUESSION_SHUTDOWN(helper);
+	BUESSION_SHUTDOWN(math);
 	BUESSION_SHUTDOWN(registry);
 	BUESSION_SHUTDOWN(validate);
 

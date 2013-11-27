@@ -3,6 +3,12 @@ Changes 1.0.0 Alpha
 	*) Change：修改 IP 验证 flags 默认值为：0，即将原来的默认不允许为保留 IP，修改为默认允许为保留 IP
 	*) Change：删除电话号码验证内部 API 和相关数据结构
 	*) Change：调整 Validate::isBlank 内部 API
+	*) Feature: 增加将任意一个数转化为绝对值的整数 API（Math::cplus）
+	*) Feature: 增加指定范围内的随机数 API（Math::rand）
+	*) Feature: 增加获取两个或两个以上正整数最小公倍数 API（Math::lcm）
+	*) Feature: 增加获取两个或两个以上正整数最大公约数 API（Math::gcd）
+	*) Feature: 增加生成 HTML 标签 Helper API（Helper\Html）
+	*) Feature: 增加生成 Form 标签 Helper API（Helper\Form）
 
 Changes 0.0.1 Release
 												25 Nov 2013
