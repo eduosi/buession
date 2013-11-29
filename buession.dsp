@@ -177,10 +177,6 @@ SOURCE=./dict/creditcard/visa.c
 # End Source File
 
 # Begin Source File
-SOURCE=./application/application.c
-# End Source File
-
-# Begin Source File
 SOURCE=./exception.c
 # End Source File
 
@@ -317,6 +313,30 @@ SOURCE=./assert/assert.h
 
 # Begin Source File
 SOURCE=./calendar/calendar.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/config.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/cache.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/simple.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/json.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/ini.h
+# End Source File
+
+# Begin Source File
+SOURCE=./config/properties.h
 # End Source File
 
 # Begin Source File

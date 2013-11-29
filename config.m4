@@ -70,6 +70,7 @@ if test "$PHP_BUESSION" != "no"; then
 		dict/creditcard/jcb.c dict/creditcard/laser.c dict/creditcard/maestro.c dict/creditcard/mastercard.c \
 		dict/creditcard/solo.c dict/creditcard/uniopay.c dict/creditcard/visa.c \
 		assert/assert.c calendar/calendar.c \
+		config/config.c config/cache.c config/simple.c config/json.c config/ini.c config/properties.c \
 		helper/helper.c helper/html.c helper/form.c \
 		math/math.c registry/registry.c \
 		validate/validate.c], $ext_shared, ,$PHP_BUESSION_FLAGS)
