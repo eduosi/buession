@@ -196,7 +196,7 @@ static int config_ini_render_apply(zval **value TSRMLS_DC, int num_args, va_list
 	smart_str *buffer = va_arg(args, smart_str *);
 	char *parent = va_arg(args, char *);
 	uint parent_length = va_arg(args, uint);
-	int isBranch = va_arg(args, zend_bool);
+	int isBranch = va_arg(args, int);
 
 	if(Z_TYPE_PP(value) == IS_ARRAY||Z_TYPE_PP(value) == IS_OBJECT){
 		HashTable *ht = buession_zval_convert_to_hash(*value TSRMLS_CC);
