@@ -143,6 +143,7 @@ typedef struct _config_object {
 		array_init_size(return_value, zend_hash_num_elements(cache->data));	\
 		zend_hash_merge(Z_ARRVAL_P(return_value), cache->data, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *), TRUE);	\
 		zend_hash_merge((config)->data, cache->data, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *), TRUE);	\
+		CONFIG_LOAD_FILE_DEBUG_SUCCESS("cache", (config)->path);	\
 		return;	\
 	}	\
 }
@@ -154,8 +155,10 @@ typedef struct _config_object {
 	RETURN_BOOL(result == SUCCESS);	\
 }
 
-#define CONFIG_LOAD_FILE_DEBUG_SUCCESS(file_type, path)	//logger.debug("load config from "file_type" file '%s' success.", (path))
-#define CONFIG_LOAD_FILE_DEBUG_FAILURE(file_type, path)	//logger.debug("load config from "file_type" file '%s' failure.", (path))
+//#define CONFIG_LOAD_FILE_DEBUG_SUCCESS(file_type, path)	//logger.debug("load config from "file_type" file '%s' success.", (path))
+#define CONFIG_LOAD_FILE_DEBUG_SUCCESS(file_type, path)	php_printf("load config from %s file '%s' success.", file_type, (path))
+//#define CONFIG_LOAD_FILE_DEBUG_FAILURE(file_type, path)	//logger.debug("load config from "file_type" file '%s' failure.", (path))
+#define CONFIG_LOAD_FILE_DEBUG_FAILURE(file_type, path)	php_printf("load config from %s file '%s' failure.", file_type, (path))
 
 #define config_file_empty_exception(){	\
 	zval *exception = buession_throw_exception_error(illegalexception_ce, E_ERROR, ZEND_STRL("Invalid config file path, could not empty"), 0);	\

@@ -72,19 +72,7 @@ BUESSION_API zval *buession_zval_persistent_value(zval *value TSRMLS_DC){
 				Z_ARRVAL_P(ret) = temp_ht;
 			}
 			break;
-		case IS_OBJECT: {
-				/*zend_object_value *zobject = (zend_object_value *) pemalloc(sizeof(zend_object_value), TRUE);
-				HashTable *properties = zend_std_get_properties(value TSRMLS_CC);
-				zend_object *new_object;
-
-				zobject->handle = Z_OBJ_HANDLE_P(value);
-				zobject->handlers = (zend_object_handlers *) pemalloc(sizeof(zend_object_handlers), TRUE);
-				//memcpy(zobject, &Z_OBJVAL_P(value), sizeof(zend_object_value));
-				memcpy(zobject->handlers, &Z_OBJ_HT_P(value), sizeof(zend_object_handlers));
-				Z_OBJVAL_P(ret) = *zobject;
-				new_object = zend_object_store_get_object(ret TSRMLS_CC);
-				buession_hash_persistent_copy(new_object->properties, properties TSRMLS_CC);*/
-			}
+		case IS_OBJECT:
 			break;
 		case IS_NULL:
 			break;

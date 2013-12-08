@@ -64,6 +64,7 @@ static BUESSION_METHOD(config_simple, load){
 	zval *result = NULL;
 
 	config_load_init(intern);
+	//CONFIG_RETURN_CACHE(intern);
 
 	memset(&file_handle, 0, sizeof(zend_file_handle));
 	file_handle.filename = intern->path;
@@ -104,6 +105,7 @@ static BUESSION_METHOD(config_simple, load){
 		if(result&&Z_TYPE_P(result) == IS_ARRAY){
 			buession_hash_free(intern->data);
 			intern->data = Z_ARRVAL_P(result);
+			//CONFIG_SAVE_CACHE(intern);
 			CONFIG_LOAD_FILE_DEBUG_SUCCESS("php file", intern->path);
 			BUESSION_RETURN_ZVAL(result, TRUE, FALSE);
 		}

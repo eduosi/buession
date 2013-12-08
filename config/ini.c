@@ -325,9 +325,9 @@ static BUESSION_METHOD(config_ini, save){
 
 	config_save_init(intern, path, path_length, data);
 
-	if((data_ht = buession_zval_convert_to_hash(data TSRMLS_CC))){
-		zend_hash_apply_with_arguments(data_ht TSRMLS_CC, (apply_func_args_t) config_ini_render_apply, 4, &content, NULL, 0, FALSE);
-	}
+	//if((data_ht = buession_zval_convert_to_hash(data TSRMLS_CC))){
+		//zend_hash_apply_with_arguments(data_ht TSRMLS_CC, (apply_func_args_t) config_ini_render_apply, 4, &content, NULL, 0, FALSE);
+	//}
 	smart_str_0(&content);
 	config_save_write(path, path_length, content);
 }
