@@ -59,7 +59,7 @@ extern zend_class_entry *buession_ce;
 #define BUESSION_MINOR_VERSION		1
 #define BUESSION_RELEASE_VERSION	0
 #define BUESSION_EXTRA_VERSION		"Release"
-#define BUESSION_VERSION 			"0.1.0"
+#define BUESSION_VERSION 			"1.0.0"
 #define BUESSION_BUILD				""
 #define BUESSION_API_VERSION 		ZEND_TOSTR(PHP_API_VERSION)
 #define BUESSION_REVISION_ID		"$Revision: "BUESSION_API_VERSION" $"
