@@ -148,9 +148,9 @@ typedef struct _config_object {
 	}	\
 }
 
-#define config_save_write(_path, _path_length, str){	\
+#define config_save_write(path, path_length, str){	\
 	size_t result_size;	\
-	int result = buession_file_write((_path), (_path_length), (str).c, (str).len, PHP_LOCK_EX, &result_size TSRMLS_CC);	\
+	int result = buession_file_write((path), (path_length), (str).c, (str).len, PHP_LOCK_EX, &result_size TSRMLS_CC);	\
 	smart_str_free(&(str));	\
 	RETURN_BOOL(result == SUCCESS);	\
 }

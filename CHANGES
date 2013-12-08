@@ -1,5 +1,10 @@
+Changes 1.0.0 Beta
+												09 Dec 2013
+	*) Change：讲 Properties Config 保存数据时换行符由固定的"\r\n"，更改为宏 PHP_EOL
+	*) Bugfix: Ini Config 和 Properties Config key 长度问题
+
 Changes 1.0.0 Alpha
-												25 Nov 2013
+												08 Dec 2013
 	*) Change：修改 IP 验证 flags 默认值为：0，即将原来的默认不允许为保留 IP，修改为默认允许为保留 IP
 	*) Change：删除电话号码验证内部 API 和相关数据结构
 	*) Change：调整 Validate::isBlank 内部 API

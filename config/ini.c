@@ -50,21 +50,17 @@ ZEND_END_ARG_INFO()
 /* }}} */
 
 static void config_ini_add_value(zval *dest, char *key, uint key_length, zval *value TSRMLS_DC){
-	if(value){
-		zval *val;
+	zval *val;
 
-		config_ini_parse_value(value, val);
-		add_assoc_zval_ex(dest, key, key_length, val);
-	}
+	config_ini_parse_value(value, val);
+	add_assoc_zval_ex(dest, key, key_length, val);
 }
 
 static void config_ini_add_next_index_value(zval *dest, zval *value TSRMLS_DC){
-	if(value){
-		zval *val;
+	zval *val;
 
-		config_ini_parse_value(value, val);
-		add_next_index_zval(dest, val);
-	}
+	config_ini_parse_value(value, val);
+	add_next_index_zval(dest, val);
 }
 
 static void config_ini_simple_parse(zval *arg1, zval *arg2, zval *arg3, int callback_type, zval *result TSRMLS_DC){
@@ -209,7 +205,7 @@ static int config_ini_render_apply(zval **value TSRMLS_DC, int num_args, va_list
 					parent_key_length = spprintf(&parent_key, 0, "%s.%s", parent, hash_key->arKey);
 				}else{
 					parent_key_length = hash_key->nKeyLength - 1;
-					parent_key = estrndup(hash_key->arKey, hash_key->nKeyLength);
+					parent_key = estrndup(hash_key->arKey, parent_key_length);
 				}
 			}else{
 				if(parent){
@@ -328,6 +324,8 @@ static BUESSION_METHOD(config_ini, save){
 	if((data_ht = buession_zval_convert_to_hash(data TSRMLS_CC))){
 		zend_hash_apply_with_arguments(data_ht TSRMLS_CC, (apply_func_args_t) config_ini_render_apply, 4, &content, NULL, 0, FALSE);
 	}
+
+	content.len = content.len - (sizeof(PHP_EOL) - 1);
 	smart_str_0(&content);
 	config_save_write(path, path_length, content);
 }

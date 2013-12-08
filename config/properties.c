@@ -245,6 +245,8 @@ static BUESSION_METHOD(config_properties, save){
 	if((data_ht = buession_zval_convert_to_hash(data TSRMLS_CC))){
 		zend_hash_apply_with_arguments(data_ht TSRMLS_CC, (apply_func_args_t) config_properties_render_apply, 3, &content, NULL, 0);
 	}
+
+	content.len = content.len - (sizeof(PHP_EOL) - 1);
 	smart_str_0(&content);
 	config_save_write(path, path_length, content);
 }

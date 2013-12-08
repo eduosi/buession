@@ -134,7 +134,7 @@ static BUESSION_METHOD(config_simple, save){
 
 	config_save_init(intern, path, path_length, data);
 
-	smart_str_appendl(&content, "<?php\r\n\treturn ", sizeof("<?php\r\n\treturn ") - 1);
+	smart_str_appendl(&content, "<?php"PHP_EOL"\treturn ", sizeof("<?php"PHP_EOL"\treturn ") - 1);
 	if(Z_TYPE_P(data) == IS_OBJECT){
 		HashTable *properties = Z_OBJ_HT_P(data)->get_properties(data TSRMLS_CC);
 		zval *zproperties;
@@ -155,7 +155,7 @@ static BUESSION_METHOD(config_simple, save){
 	}else{
 		php_var_export_ex(&data, 1, &content TSRMLS_CC);
 	}
-	smart_str_appendl(&content, ";\r\n?>", sizeof(";\r\n?>") - 1);
+	smart_str_appendl(&content, ";"PHP_EOL"?>", sizeof(";"PHP_EOL"?>") - 1);
 
 	smart_str_0(&content);
 	config_save_write(path, path_length, content);
