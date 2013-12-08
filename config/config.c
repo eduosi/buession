@@ -90,8 +90,7 @@ static BUESSION_OBJECT_FREE(config){
 	}
 
 	BUESSION_OBJECT_STRING_FIELDS_FREE(intern, path);
-	buession_free((char *) intern->cacheid);
-	intern->cacheid_length = 0;
+	BUESSION_OBJECT_STRING_FIELDS_FREE(intern, cacheid);
 	buession_hash_free(intern->data);
 
 	zend_object_std_dtor(&intern->std TSRMLS_CC);

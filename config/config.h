@@ -32,7 +32,7 @@ typedef struct _config_object {
 	zend_object	std;
 	char *path;
 	size_t path_length;
-	const unsigned char *cacheid;
+	char *cacheid;
 	size_t cacheid_length;
 	HashTable *data;
 	int refcount;
