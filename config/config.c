@@ -75,11 +75,11 @@ ZEND_END_ARG_INFO()
 static BUESSION_MODULE_GLOBALS_CTOR(config){
 	memset(buession_config_globals, 0, sizeof(zend_buession_config_globals));
 
-	BUESSION_CONFIG_G(sections) = NULL;
+	buession_config_globals->sections = NULL;
 }
 
 static BUESSION_MODULE_GLOBALS_DTOR(config){
-	BUESSION_CONFIG_G(sections) = NULL;
+	buession_config_globals->sections = NULL;
 }
 
 static BUESSION_OBJECT_FREE(config){
