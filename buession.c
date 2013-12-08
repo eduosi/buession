@@ -519,11 +519,11 @@ ZEND_GSHUTDOWN_FUNCTION(buession){
 	zend_hash_destroy(&(buession_globals->registry.registries));
 	zend_hash_destroy(&(buession_globals->registry.instances));
 
-	#ifdef ZTS
+	/*#ifdef ZTS
 		ts_free_id(buession_globals_id);
 	#else
 		buession_destroy_globals(&buession_globals TSRMLS_CC);
-	#endif
+	#endif*/
 }
 /* }}} */
 

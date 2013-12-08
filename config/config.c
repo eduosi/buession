@@ -42,7 +42,7 @@
 
 zend_class_entry *config_ce;
 
-BUESSION_API ZEND_DECLARE_MODULE_GLOBALS(buession_config)
+ZEND_DECLARE_MODULE_GLOBALS(buession_config)
 
 static zend_object_handlers config_object_handlers;
 
