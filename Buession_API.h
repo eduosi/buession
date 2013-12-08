@@ -214,8 +214,8 @@ BUESSION_API zend_bool buession_extension_loaded_ex(const char *name, uint lengt
 
 BUESSION_API void buession_json_encode(zval *data, smart_str *result TSRMLS_DC);
 
-BUESSION_API int buession_hashcode(char *str, char *algo, char **result, uint *result_length TSRMLS_DC);
-BUESSION_API int buession_hashcode_ex(char *str, uint str_length, char *algo, uint algo_length, char **result, uint *result_length TSRMLS_DC);
+BUESSION_API int buession_hashcode(char *str, char *algo, char **result, size_t *result_length TSRMLS_DC);
+BUESSION_API int buession_hashcode_ex(char *str, uint str_length, char *algo, uint algo_length, char **result, size_t *result_length TSRMLS_DC);
 
 /* file system object start */
 BUESSION_API zend_bool buession_check_folder_exists(char *path, uint path_length TSRMLS_DC);

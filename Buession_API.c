@@ -404,10 +404,10 @@ BUESSION_API void buession_json_encode(zval *data, smart_str *result TSRMLS_DC){
 	smart_str_0(result);
 }
 
-BUESSION_API int buession_hashcode(char *str, char *algo, char **result, uint *result_length TSRMLS_DC){
+BUESSION_API int buession_hashcode(char *str, char *algo, char **result, size_t *result_length TSRMLS_DC){
 	return buession_hashcode_ex(str, strlen(str), algo, strlen(algo), result, result_length TSRMLS_CC);
 }
-BUESSION_API int buession_hashcode_ex(char *str, uint str_length, char *algo, uint algo_length, char **result, uint *result_length TSRMLS_DC){
+BUESSION_API int buession_hashcode_ex(char *str, uint str_length, char *algo, uint algo_length, char **result, size_t *result_length TSRMLS_DC){
 	char *digest;
 	const php_hash_ops *ops = php_hash_fetch_ops(algo, algo_length);
 	void *context;
