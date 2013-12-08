@@ -261,7 +261,7 @@ static BUESSION_OBJECT_UNSERIALIZE(config){
 	ALLOC_INIT_ZVAL(pvar);
 	if(!php_var_unserialize(&pvar, &s, s + str_length, (php_unserialize_data_t *) var_hash TSRMLS_CC)){
 		zval_ptr_dtor(&pvar);
-		buession_throw_exception_ex(illegalexception_ce, E_NOTICE, "Error at offset %ld of %d bytes", 0, (long) ((char *) s - str), str_length);
+		buession_throw_exception_ex(illegalexception_ce, E_NOTICE, "Error at offset %ld of %d bytes", 0, (long) (s - str), str_length);
 
 		return FAILURE;
 	}
