@@ -101,7 +101,9 @@ BUESSION_API int config_cache_load(const char *cacheid, size_t cacheid_length, c
 }
 
 BUESSION_API void config_cache_free(config_cache *cache TSRMLS_DC){
-	buession_free((char *) cache->cacheid);
+	char *cacheid = (char *) cache->cacheid;
+
+	buession_free(cacheid);
 	cache->cacheid_length = 0;
 	cache->modifiedat = 0 ;
 	buession_hash_free(cache->data);
