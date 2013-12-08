@@ -196,7 +196,7 @@ static int config_ini_render_apply(zval **value TSRMLS_DC, int num_args, va_list
 	smart_str *buffer = va_arg(args, smart_str *);
 	char *parent = va_arg(args, char *);
 	uint parent_length = va_arg(args, uint);
-	zend_bool isBranch = (zend_bool) va_arg(args, zend_bool);
+	int isBranch = va_arg(args, zend_bool);
 
 	if(Z_TYPE_PP(value) == IS_ARRAY||Z_TYPE_PP(value) == IS_OBJECT){
 		HashTable *ht = buession_zval_convert_to_hash(*value TSRMLS_CC);
@@ -298,7 +298,7 @@ static BUESSION_METHOD(config_ini, load){
 	BUESSION_CONFIG_G(sections) = NULL;
 
 	array_init(return_value);
-	if(zend_parse_ini_file(&file_handle, FALSE, ZEND_INI_SCANNER_RAW, config_ini_parse_with_section, return_value TSRMLS_CC) == SUCCESS){
+	if(zend_parse_ini_file(&file_handle, FALSE, ZEND_INI_SCANNER_RAW, (zend_ini_parser_cb_t) config_ini_parse_with_section, return_value TSRMLS_CC) == SUCCESS){
 		zend_hash_merge(intern->data, Z_ARRVAL_P(return_value), (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *), TRUE);
 		CONFIG_SAVE_CACHE(intern);
 		CONFIG_LOAD_FILE_DEBUG_SUCCESS("ini", intern->path);
