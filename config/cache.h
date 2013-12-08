@@ -32,9 +32,9 @@ BUESSION_API void config_cache_startup(TSRMLS_D);
 
 BUESSION_API void config_cache_initialize(config_cache *cache TSRMLS_DC);
 
-BUESSION_API int config_cache_save(const unsigned char *cacheid, size_t cacheid_length, char *path, uint path_length, HashTable *data TSRMLS_DC);
+BUESSION_API int config_cache_save(const char *cacheid, size_t cacheid_length, char *path, uint path_length, HashTable *data TSRMLS_DC);
 
-BUESSION_API int config_cache_load(const unsigned char *cacheid, size_t cacheid_length, char *path, uint path_length, config_cache **cache TSRMLS_DC);
+BUESSION_API int config_cache_load(const char *cacheid, size_t cacheid_length, char *path, uint path_length, config_cache **cache TSRMLS_DC);
 
 BUESSION_API void config_cache_free(config_cache *cache TSRMLS_DC);
 
