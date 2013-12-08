@@ -24,7 +24,8 @@
 
 extern zend_class_entry *math_ce;
 
-#define BUESSION_MATH_ME(method, arguments) ZEND_ME(buession_math, method, arguments, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#define BUESSION_MATH_ME(method, arguments, flags) ZEND_ME(buession_math, method, arguments, flags)
+#define BUESSION_MATH_STATIC_ME(method, arguments) ZEND_ME(buession_math, method, arguments, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 #define math_register_long_constant(name, value) zend_declare_class_constant_long(math_ce, ZEND_STRL(name), value TSRMLS_CC)
 #define math_register_double_constant(name, value) zend_declare_class_constant_double(math_ce, ZEND_STRL(name), value TSRMLS_CC)
