@@ -149,9 +149,9 @@ typedef struct _config_object {
 
 #define config_save_write(_path, _path_length, str){	\
 	size_t result_size;	\
-	Z_TYPE_P(return_value) = IS_BOOL;	\
-	Z_BVAL_P(return_value) = buession_file_write((_path), (_path_length), (str).c, (str).len, PHP_LOCK_EX, &result_size TSRMLS_CC) == SUCCESS;	\
+	int result = buession_file_write((_path), (_path_length), (str).c, (str).len, PHP_LOCK_EX, &result_size TSRMLS_CC);	\
 	smart_str_free(&(str));	\
+	RETURN_BOOL(result == SUCCESS);	\
 }
 
 #define CONFIG_LOAD_FILE_DEBUG_SUCCESS(file_type, path)	//logger.debug("load config from "file_type" file '%s' success.", (path))
