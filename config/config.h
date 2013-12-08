@@ -56,7 +56,7 @@ typedef struct _config_object {
 			char *real_path;	\
 			uint real_path_length;	\
 			buession_free((config)->path);	\
-			buession_free((char *) (config)->cacheid);	\
+			buession_free((config)->cacheid);	\
 			if(buession_get_fso_real_path((_path), (_path_length), &real_path, &real_path_length TSRMLS_CC) == SUCCESS){	\
 				(config)->path = estrndup(real_path, real_path_length);	\
 				(config)->path_length = real_path_length;	\
