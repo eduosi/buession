@@ -56,7 +56,7 @@ BUESSION_API void config_cache_initialize(config_cache *cache TSRMLS_DC){
 	cache->data = NULL;
 }
 
-BUESSION_API int config_cache_save(const config_cacheid cacheid, size_t cacheid_length, char *path, uint path_length, HashTable *data TSRMLS_DC){
+BUESSION_API int config_cache_save(const unsigned char *cacheid, size_t cacheid_length, char *path, uint path_length, HashTable *data TSRMLS_DC){
 	config_cache cache;
 
 	if(!data){
@@ -87,7 +87,7 @@ BUESSION_API int config_cache_save(const config_cacheid cacheid, size_t cacheid_
 		return FAILURE;
 }
 
-BUESSION_API int config_cache_load(const config_cacheid cacheid, size_t cacheid_length, char *path, uint path_length, config_cache **cache TSRMLS_DC){
+BUESSION_API int config_cache_load(const unsigned char *cacheid, size_t cacheid_length, char *path, uint path_length, config_cache **cache TSRMLS_DC){
 	if(zend_hash_find(&config_caches, cacheid, cacheid_length + 1, (void **) cache) == SUCCESS){
 		if(config_file_modified(path, path_length, (*cache)->modifiedat TSRMLS_CC) == 0){
 			//logger.debug("load config file '%s' from cache '%s' success.", path, cacheid);
@@ -101,7 +101,7 @@ BUESSION_API int config_cache_load(const config_cacheid cacheid, size_t cacheid_
 }
 
 BUESSION_API void config_cache_free(config_cache *cache TSRMLS_DC){
-	buession_free(cache->cacheid);
+	buession_free((char *) cache->cacheid);
 	cache->cacheid_length = 0;
 	cache->modifiedat = 0 ;
 	buession_hash_free(cache->data);

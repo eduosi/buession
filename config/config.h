@@ -32,7 +32,7 @@ typedef struct _config_object {
 	zend_object	std;
 	char *path;
 	size_t path_length;
-	config_cacheid cacheid;
+	const unsigned char *cacheid;
 	size_t cacheid_length;
 	HashTable *data;
 	int refcount;
@@ -56,7 +56,7 @@ typedef struct _config_object {
 			char *real_path;	\
 			uint real_path_length;	\
 			buession_free((config)->path);	\
-			buession_free((config)->cacheid);	\
+			buession_free((char *) (config)->cacheid);	\
 			if(buession_get_fso_real_path((_path), (_path_length), &real_path, &real_path_length TSRMLS_CC) == SUCCESS){	\
 				(config)->path = estrndup(real_path, real_path_length);	\
 				(config)->path_length = real_path_length;	\
@@ -64,7 +64,7 @@ typedef struct _config_object {
 				(config)->path = estrndup(_path, _path_length);	\
 				(config)->path_length = _path_length;	\
 			}	\
-			if(buession_hashcode_ex((config)->path, (config)->path_length, "sha1", 4, &(config)->cacheid, &(config)->cacheid_length TSRMLS_CC) == FAILURE){	\
+			if(buession_hashcode_ex((config)->path, (config)->path_length, "sha1", 4, (char **) &(config)->cacheid, &(config)->cacheid_length TSRMLS_CC) == FAILURE){	\
 				(config)->cacheid = estrndup((config)->path, (config)->path_length);	\
 				(config)->cacheid_length = (config)->path_length;	\
 			}	\
