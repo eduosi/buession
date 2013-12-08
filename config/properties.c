@@ -137,7 +137,7 @@ static int config_properties_render_apply(zval **value TSRMLS_DC, int num_args, 
 				parent_key_length = spprintf(&parent_key, 0, "%s.%s", parent, hash_key->arKey);
 			}else{
 				parent_key_length = hash_key->nKeyLength - 1;
-				parent_key = estrndup(hash_key->arKey, hash_key->nKeyLength);
+				parent_key = estrndup(hash_key->arKey, parent_key_length);
 			}
 		}else{
 			if(parent){
