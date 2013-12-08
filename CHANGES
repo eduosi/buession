@@ -1,6 +1,10 @@
+Changes 1.0.0 Release
+												09 Dec 2013
+	*) Change：修改 Math 内部宏
+
 Changes 1.0.0 Beta
 												09 Dec 2013
-	*) Change：讲 Properties Config 保存数据时换行符由固定的"\r\n"，更改为宏 PHP_EOL
+	*) Change：将 Properties Config 保存数据时换行符由固定的"\r\n"，更改为宏 PHP_EOL
 	*) Bugfix: Ini Config 和 Properties Config key 长度问题
 
 Changes 1.0.0 Alpha

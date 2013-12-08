@@ -145,12 +145,10 @@ static BUESSION_METHOD(math, cplus){
 
 	if(zend_parse_parameters(1 TSRMLS_CC, "Z", &value) == SUCCESS){
 		convert_scalar_to_number_ex(value);
-		if(return_value_used){
-			if(Z_TYPE_PP(value) == IS_DOUBLE){
-				RETURN_LONG((long) fabs(Z_DVAL_PP(value)));
-			}else if(Z_TYPE_PP(value) == IS_LONG){
-				RETURN_LONG((long) fabs((double) Z_LVAL_PP(value)));
-			}
+		if(Z_TYPE_PP(value) == IS_DOUBLE){
+			RETURN_LONG((long) fabs(Z_DVAL_PP(value)));
+		}else if(Z_TYPE_PP(value) == IS_LONG){
+			RETURN_LONG((long) fabs((double) Z_LVAL_PP(value)));
 		}
 	}
 
@@ -195,12 +193,12 @@ static BUESSION_METHOD(math, __destruct){
 /* }}} */
 
 static zend_function_entry math_methods[] = {
-	ZEND_ME(buession_math, __construct, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_CTOR)
-	BUESSION_MATH_ME(cplus, math_cplus_arguments)
-	BUESSION_MATH_ME(rand, math_rand_arguments)
-	BUESSION_MATH_ME(lcm, math_lcm_arguments)
-	BUESSION_MATH_ME(gcd, math_gcd_arguments)
-	ZEND_ME(buession_math, __destruct, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_DTOR)
+	BUESSION_MATH_ME(__construct, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_CTOR)
+	BUESSION_MATH_STATIC_ME(cplus, math_cplus_arguments)
+	BUESSION_MATH_STATIC_ME(rand, math_rand_arguments)
+	BUESSION_MATH_STATIC_ME(lcm, math_lcm_arguments)
+	BUESSION_MATH_STATIC_ME(gcd, math_gcd_arguments)
+	BUESSION_MATH_ME(__destruct, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_DTOR)
 	ZEND_FE_END
 };
 
