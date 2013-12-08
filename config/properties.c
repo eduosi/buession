@@ -216,7 +216,7 @@ static BUESSION_METHOD(config_properties, load){
 	BUESSION_CONFIG_G(sections) = NULL;
 
 	array_init(return_value);
-	if(zend_parse_ini_file(&file_handle, FALSE, ZEND_INI_SCANNER_RAW, config_properties_parse, return_value TSRMLS_CC) == SUCCESS){
+	if(zend_parse_ini_file(&file_handle, FALSE, ZEND_INI_SCANNER_RAW, (zend_ini_parser_cb_t) config_properties_parse, return_value TSRMLS_CC) == SUCCESS){
 		zend_hash_merge(intern->data, Z_ARRVAL_P(return_value), (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *), TRUE);
 		CONFIG_SAVE_CACHE(intern);
 		CONFIG_LOAD_FILE_DEBUG_SUCCESS("properties", intern->path);
