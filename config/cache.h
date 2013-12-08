@@ -22,7 +22,7 @@
 #define BUESSION_CONFIG_CACHE_H
 
 typedef struct _config_cache {
-	const unsigned char *cacheid;
+	const char *cacheid;
 	size_t cacheid_length;
 	time_t modifiedat;
 	HashTable *data;
